@@ -1,0 +1,17 @@
+.card {
+    border: 2px solid #eee;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f9f9f9;
+    transition: 0.3s;
+}
+.card:hover { border-color: #3498db; }
+.buy-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.out-of-stock { background: #ccc; cursor: not-allowed; }
