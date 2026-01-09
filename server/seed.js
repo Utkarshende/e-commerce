@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
-// Use 127.0.0.1 instead of localhost
-const mongoURI = 'mongodb://127.0.0.1:27017/simple-shop';
-
-mongoose.connect(mongoURI)
-    .then(() => console.log("MongoDB Connected for seeding..."))
-    .catch(err => console.error("Could not connect to MongoDB:", err));
+const mongoURI = 'mongodb+srv://utkarsha:Utkarsha%401403@cluster0.hbdlkgl.mongodb.net/simple-shop';
 
 const Product = mongoose.model('Product', { 
     name: String, 
@@ -21,13 +16,24 @@ const seedData = [
 
 const seedDB = async () => {
     try {
+        console.log("Connecting to MongoDB...");
+        // We wait (await) for the connection to be 100% ready
+        await mongoose.connect(mongoURI);
+        console.log("✅ MongoDB Connected!");
+
+        console.log("Clearing old products...");
         await Product.deleteMany({}); 
+
+        console.log("Inserting new products...");
         await Product.insertMany(seedData);
-        console.log("✅ Database Seeded Successfully!");
+
+        console.log("✨ Database Seeded Successfully!");
     } catch (error) {
-        console.error("❌ Seeding Error:", error);
+        console.error("❌ Seeding Error:", error.message);
+        console.log("\nTIP: Make sure your MongoDB Service is running in Windows Services.");
     } finally {
-        mongoose.connection.close();
+        await mongoose.connection.close();
+        process.exit();
     }
 };
 
