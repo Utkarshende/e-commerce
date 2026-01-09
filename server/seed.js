@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
-// Connect to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/simple-shop');
+// Use 127.0.0.1 instead of localhost
+const mongoURI = 'mongodb://127.0.0.1:27017/simple-shop';
+
+mongoose.connect(mongoURI)
+    .then(() => console.log("MongoDB Connected for seeding..."))
+    .catch(err => console.error("Could not connect to MongoDB:", err));
 
 const Product = mongoose.model('Product', { 
     name: String, 
@@ -16,10 +20,15 @@ const seedData = [
 ];
 
 const seedDB = async () => {
-    await Product.deleteMany({}); // Clears existing data
-    await Product.insertMany(seedData);
-    console.log("Database Seeded with Products!");
-    process.exit();
+    try {
+        await Product.deleteMany({}); 
+        await Product.insertMany(seedData);
+        console.log("✅ Database Seeded Successfully!");
+    } catch (error) {
+        console.error("❌ Seeding Error:", error);
+    } finally {
+        mongoose.connection.close();
+    }
 };
 
 seedDB();
