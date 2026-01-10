@@ -1,9 +1,10 @@
 import './ProductCard.css';
 
 const ProductCard = ({ product, onAddToCart }) => {
-  // Function to handle image errors
+  
+  // High-end fallback: if the database image fails, use this generic "Luxe" placeholder
   const handleImageError = (e) => {
-    e.target.src = "https://images.unsplash.com/photo-1560393464-5c69a73c5770?q=80&w=500&auto=format&fit=crop"; // A high-end generic "item" image
+    e.target.src = "https://images.unsplash.com/photo-1560393464-5c69a73c5770?q=80&w=500&auto=format&fit=crop"; 
   };
 
   return (
@@ -14,7 +15,7 @@ const ProductCard = ({ product, onAddToCart }) => {
         src={product.image} 
         alt={product.name} 
         className="product-img" 
-        onError={handleImageError} // If the link is broken, this runs
+        onError={handleImageError} // This is the professional magic line
       />
       
       <div className="card-info">
