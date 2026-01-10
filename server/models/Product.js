@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema({
     stock: { type: Number, required: true, default: 0 },
     image: { type: String },
     category: { type: String, default: "General" },
-    description: { type: String, default: "No description available" } // Ensure this exists!
+    description: { type: String, required: true } // We make it 'required' to force it to show up
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', ProductSchema);
