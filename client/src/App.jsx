@@ -1,31 +1,33 @@
-import { useState, useEffect } from 'react'; // Added useEffect
-import io from 'socket.io-client'; // Added socket
-import axios from 'axios'; // Added axios
+
+import { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import axios from 'axios';
 import ProductCard from './ProductCard';
 import CartModal from './CartModal';
 import './App.css';
 
-// Connect to the backend socket
+// Connect to the backend socket server
 const socket = io('http://localhost:5000');
 
 function App() {
   const [cart, setCart] = useState([]);
-  const [products, setProducts] = useState([]); // Now starts as empty array
+  const [products, setProducts] = useState([]); 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 1. Load data and setup real-time listeners
   useEffect(() => {
-    // 1. Fetch products from backend database
+    // Fetch products from the database on startup
     const fetchProducts = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/products');
         setProducts(res.data);
       } catch (err) {
-        console.error("Could not fetch products", err);
+        console.error("Error fetching products:", err);
       }
     };
     fetchProducts();
 
-    // 2. Listen for Real-Time stock updates
+    // Listen for real-time stock updates from the server
     socket.on('stockUpdate', (data) => {
       setProducts((prevProducts) =>
         prevProducts.map((p) =>
@@ -34,16 +36,35 @@ function App() {
       );
     });
 
-    // Clean up connection when app closes
+    // Cleanup connection when the component unmounts
     return () => socket.off('stockUpdate');
   }, []);
 
-  const addToCart = (product) => setCart([...cart, product]);
-  const clearCart = () => setCart([]);
+  // 2. Load cart from LocalStorage so items don't disappear on refresh
+  useEffect(() => {
+    const savedCart = localStorage.getItem('my_cart');
+    if (savedCart) setCart(JSON.parse(savedCart));
+  }, []);
+
+  // 3. Save cart to LocalStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('my_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
+
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem('my_cart');
+  };
+
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <div className="container">
+      {/* Navigation Bar */}
       <nav className="navbar">
         <h1 className="logo">MySimpleShop</h1>
         <div className="cart-icon" onClick={() => setIsModalOpen(true)}>
@@ -51,16 +72,22 @@ function App() {
         </div>
       </nav>
 
+      {/* Product Display Grid */}
       <main className="product-grid">
-        {products.map((product) => (
-          <ProductCard 
-            key={product._id} // Note: MongoDB uses _id, not id
-            product={product} 
-            onAddToCart={() => addToCart(product)} 
-          />
-        ))}
+        {products.length === 0 ? (
+          <p>Connecting to database... please wait.</p>
+        ) : (
+          products.map((product) => (
+            <ProductCard 
+              key={product._id} 
+              product={product} 
+              onAddToCart={() => addToCart(product)} 
+            />
+          ))
+        )}
       </main>
 
+      {/* Cart Modal Pop-up */}
       <CartModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
