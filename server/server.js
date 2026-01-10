@@ -44,13 +44,31 @@ app.post('/api/buy/:id', async (req, res) => {
     }
 });
 // Route: Create an Order
+// ... existing imports and models ...
+
 app.post('/api/checkout', async (req, res) => {
     try {
         const { items, total } = req.body;
+
+        // 1. Save the Order
         const newOrder = new Order({ items, total });
         await newOrder.save();
-        res.json({ success: true, message: "Order saved!" });
+
+        // 2. Update Stock for each item purchased
+        for (const item of items) {
+            const product = await Product.findById(item._id);
+            if (product && product.stock > 0) {
+                product.stock -= 1;
+                await product.save();
+
+                // 3. REAL-TIME: Tell all users the stock dropped
+                io.emit('stockUpdate', { id: product._id, newStock: product.stock });
+            }
+        }
+
+        res.json({ success: true, message: "Order processed and stock updated!" });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: "Checkout failed" });
     }
 });
