@@ -21,6 +21,14 @@ const Product = mongoose.model('Product', {
     stock: Number 
 });
 
+// Order Model
+const Order = mongoose.model('Order', {
+    items: Array,
+    total: Number,
+    date: { type: Date, default: Date.now }
+});
+
+
 app.get('/api/products', async (req, res) => {
     const products = await Product.find();
     res.json(products);
@@ -35,5 +43,16 @@ app.post('/api/buy/:id', async (req, res) => {
         res.json({ success: true });
     }
 });
-
+// Route: Create an Order
+app.post('/api/checkout', async (req, res) => {
+    try {
+        const { items, total } = req.body;
+        const newOrder = new Order({ items, total });
+        await newOrder.save();
+        
+        res.json({ success: true, message: "Order saved!" });
+    } catch (error) {
+        res.status(500).json({ error: "Checkout failed" });
+    }
+});
 server.listen(5000, () => console.log("Server: http://localhost:5000"));
