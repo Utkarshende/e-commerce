@@ -7,12 +7,13 @@ const ProductCard = ({ product, onAddToCart }) => {
       <div className="card-info">
         <h3>{product.name}</h3>
         <p className="price">${product.price}</p>
-        <p className="stock">In Stock: {product.stock}</p> {/* Added stock display */}
+        {/* Real-time stock count */}
+        <p className="stock-count">In Stock: {product.stock}</p>
         
         <button 
           className="add-btn" 
-          onClick={onAddToCart}
-          disabled={product.stock <= 0} // Disable button if stock is 0
+          onClick={onAddToCart} 
+          disabled={product.stock <= 0}
         >
           {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
         </button>
