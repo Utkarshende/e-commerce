@@ -50,25 +50,27 @@ app.post('/api/checkout', async (req, res) => {
     try {
         const { items, total } = req.body;
 
-        // 1. Save the Order
+        // 1. Save the Order in the database
         const newOrder = new Order({ items, total });
         await newOrder.save();
 
-        // 2. Update Stock for each item purchased
+        // 2. Loop through items and reduce stock in MongoDB
         for (const item of items) {
-            const product = await Product.findById(item._id);
-            if (product && product.stock > 0) {
-                product.stock -= 1;
-                await product.save();
+            // Find product and subtract 1 from stock
+            const product = await Product.findByIdAndUpdate(
+                item._id, 
+                { $inc: { stock: -1 } }, 
+                { new: true }
+            );
 
-                // 3. REAL-TIME: Tell all users the stock dropped
+            // 3. Emit the change to all connected users via Socket.io
+            if (product) {
                 io.emit('stockUpdate', { id: product._id, newStock: product.stock });
             }
         }
 
-        res.json({ success: true, message: "Order processed and stock updated!" });
+        res.json({ success: true });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: "Checkout failed" });
     }
 });
