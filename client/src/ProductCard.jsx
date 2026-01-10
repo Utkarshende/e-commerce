@@ -1,6 +1,8 @@
 import './ProductCard.css';
 
 const ProductCard = ({ product, onAddToCart }) => {
+  console.log("Product Data Check:", product); // This will show you the data in the browser console
+
   return (
     <div className="card">
       <span className="category-tag">{product.category}</span>
@@ -9,23 +11,15 @@ const ProductCard = ({ product, onAddToCart }) => {
       <div className="card-info">
         <h3>{product.name}</h3>
         
-        {/* Check this line carefully! It must match the schema name exactly */}
+        {/* We use a fallback text here to see if the property is missing */}
         <p className="description">
-          {product.description ? product.description : "Loading description..."}
+          {product.description || "Data missing from database"}
         </p>
         
         <div className="card-footer">
           <span className="price">${product.price}</span>
-          <span className="stock-label">Stock: {product.stock}</span>
+          <button className="add-btn" onClick={onAddToCart}>Add to Cart</button>
         </div>
-        
-        <button 
-          className="add-btn" 
-          onClick={onAddToCart}
-          disabled={product.stock <= 0}
-        >
-          {product.stock > 0 ? "Add to Cart" : "Sold Out"}
-        </button>
       </div>
     </div>
   );
