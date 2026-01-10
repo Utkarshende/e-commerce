@@ -5,25 +5,51 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 
-// Import Controllers
 const productController = require('./controllers/productController');
 
 const app = express();
 const server = http.createServer(app);
+
+// --- CORRECTION START ---
+// We define which URLs are allowed to talk to our backend
+const allowedOrigins = [
+    "http://localhost:5173", // Your local Vite dev server
+    "https://your-netlify-site-name.netlify.app" // Your future production site
+];
+
 const io = new Server(server, { 
-    cors: { origin: process.env.CLIENT_URL || "*" } 
+    cors: { 
+        origin: (origin, callback) => {
+            // Allow requests with no origin (like mobile apps or curl) or if it's in our list
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        methods: ["GET", "POST"]
+    } 
 });
 
-app.use(cors());
+// Apply CORS to standard Express routes too
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+}));
+// --- CORRECTION END ---
+
 app.use(express.json());
 
-// Connect to MongoDB (Using .env variable)
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/simple-shop';
 mongoose.connect(MONGO_URI)
     .then(() => console.log("🚀 High-End DB Connected"))
     .catch(err => console.error("❌ DB Connection Error:", err));
 
-// Routes
 app.get('/api/products', productController.getProducts);
 app.post('/api/checkout', (req, res) => productController.checkout(req, res, io));
 
