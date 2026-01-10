@@ -49,7 +49,6 @@ app.post('/api/checkout', async (req, res) => {
         const { items, total } = req.body;
         const newOrder = new Order({ items, total });
         await newOrder.save();
-        
         res.json({ success: true, message: "Order saved!" });
     } catch (error) {
         res.status(500).json({ error: "Checkout failed" });
