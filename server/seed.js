@@ -1,38 +1,49 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
+const Product = require('./models/Product');
 
-const mongoURI = 'mongodb+srv://utkarsha:Utkarsha%401403@cluster0.hbdlkgl.mongodb.net/simple-shop';
-
-const Product = mongoose.model('Product', { 
-    name: String, 
-    price: Number, 
-    stock: Number 
-});
+const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/simple-shop';
 
 const seedData = [
-    { name: "iPhone 15", price: 999, stock: 10 },
-    { name: "MacBook Air", price: 1200, stock: 5 },
-    { name: "AirPods Pro", price: 250, stock: 15 }
+    { 
+        name: "iPhone 15 Pro", 
+        price: 999, 
+        stock: 10, 
+        category: "Electronics", 
+        description: "Experience the power of Titanium with the new A17 Pro chip.",
+        image: "https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=500&auto=format&fit=crop"
+    },
+    { 
+        name: "MacBook Air M3", 
+        price: 1299, 
+        stock: 5, 
+        category: "Laptops", 
+        description: "Strikingly thin and fast so you can work, play or create anywhere.",
+        image: "https://images.unsplash.com/photo-1517336714460-45788a1f4b8d?q=80&w=500&auto=format&fit=crop"
+    },
+    { 
+        name: "Sony WH-1000XM5", 
+        price: 399, 
+        stock: 15, 
+        category: "Accessories", 
+        description: "Industry-leading noise cancellation and magnificent sound quality.",
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=500&auto=format&fit=crop"
+    }
 ];
 
 const seedDB = async () => {
     try {
-        console.log("Connecting to MongoDB...");
-        // We wait (await) for the connection to be 100% ready
         await mongoose.connect(mongoURI);
-        console.log("✅ MongoDB Connected!");
+        console.log("Connected to DB for Reseeding...");
 
-        console.log("Clearing old products...");
         await Product.deleteMany({}); 
-
-        console.log("Inserting new products...");
         await Product.insertMany(seedData);
-
-        console.log("✨ Database Seeded Successfully!");
+        
+        console.log("✨ High-End Database Updated with Real Images!");
     } catch (error) {
-        console.error("❌ Seeding Error:", error.message);
-        console.log("\nTIP: Make sure your MongoDB Service is running in Windows Services.");
+        console.error("Seeding Error:", error);
     } finally {
-        await mongoose.connection.close();
+        mongoose.connection.close();
         process.exit();
     }
 };
