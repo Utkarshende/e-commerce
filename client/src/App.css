@@ -88,3 +88,32 @@
   color: #888;
   font-style: italic;
 }
+.order-history-banner {
+  background: #fdfdfd;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  border: 1px solid #eee;
+}
+
+.orders-list {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.order-mini-card {
+  background: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  min-width: 200px;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.status-tag {
+  color: #d4af37;
+  font-weight: bold;
+}
