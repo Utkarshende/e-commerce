@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
+import { loadStripe } from '@stripe/stripe-js';
 import ProductCard from './ProductCard';
 import CartModal from './CartModal';
 import './App.css';
 
+// Replace with your actual Stripe Publishable Key
+const stripePromise = loadStripe('pk_test_your_publishable_key_here');
 
-const API_URL = "https://e-commerce-backend-pk30.onrender.com/";
-
+// If testing locally, use http://localhost:5000. If deployed, use your Render URL.
+const API_URL = "https://e-commerce-backend-pk30.onrender.com"; 
 const socket = io(API_URL);
 
 function App() {
@@ -15,11 +18,12 @@ function App() {
   const [products, setProducts] = useState([]); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   
-  // NEW: State for Search and Filter
+  // States for Search and Filtering
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
+    // 1. Fetch initial products
     const fetchProducts = async () => {
       try {
         const res = await axios.get(`${API_URL}/api/products`);
@@ -30,6 +34,17 @@ function App() {
     };
     fetchProducts();
 
+    // 2. Check for Stripe Success/Cancel URLs
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("success")) {
+      alert("🎉 Payment Successful! Your order is being processed.");
+      setCart([]); // Clear cart after success
+    }
+    if (query.get("canceled")) {
+      alert("❌ Order canceled. Your cart is still saved.");
+    }
+
+    // 3. Real-time Socket listener for stock
     socket.on('stockUpdate', (data) => {
       setProducts((prevProducts) =>
         prevProducts.map((p) =>
@@ -37,10 +52,11 @@ function App() {
         )
       );
     });
+
     return () => socket.off('stockUpdate');
   }, []);
 
-  // --- REFINED FILTER LOGIC ---
+  // --- Search and Category Logic ---
   const filteredProducts = products.filter((p) => {
     const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -48,6 +64,30 @@ function App() {
   });
 
   const categories = ['All', ...new Set(products.map(p => p.category))];
+
+  // --- Stripe Checkout Function ---
+  const handleCheckout = async () => {
+    try {
+      const stripe = await stripePromise;
+      
+      // Request a checkout session from your Backend
+      const response = await axios.post(`${API_URL}/api/products/create-checkout-session`, {
+        cartItems: cart
+      });
+
+      // Redirect to Stripe's secure payment page
+      const result = await stripe.redirectToCheckout({
+        sessionId: response.data.id,
+      });
+
+      if (result.error) {
+        alert(result.error.message);
+      }
+    } catch (err) {
+      console.error("Checkout Error:", err);
+      alert("Failed to initiate checkout. Is your server running?");
+    }
+  };
 
   const addToCart = (product) => setCart([...cart, product]);
   const clearCart = () => setCart([]);
@@ -58,11 +98,11 @@ function App() {
       <nav className="navbar">
         <h1 className="logo">LUXE STORE</h1>
         
-        {/* NEW: Search Bar Input */}
+        {/* Live Search Bar */}
         <div className="search-container">
           <input 
             type="text" 
-            placeholder="Search products..." 
+            placeholder="Search premium products..." 
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -96,7 +136,9 @@ function App() {
             />
           ))
         ) : (
-          <div className="no-results">No products found matching "{searchQuery}"</div>
+          <div className="no-results">
+            No products found matching "{searchQuery}"
+          </div>
         )}
       </main>
 
@@ -105,6 +147,7 @@ function App() {
         onClose={() => setIsModalOpen(false)} 
         cartItems={cart}
         total={total}
+        onCheckout={handleCheckout} // Pass Stripe function to Modal
         clearCart={clearCart}
       />
     </div>
