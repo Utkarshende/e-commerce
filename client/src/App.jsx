@@ -5,20 +5,24 @@ import ProductCard from './ProductCard';
 import CartModal from './CartModal';
 import './App.css';
 
-const socket = io('http://localhost:5000');
+
+const API_URL = "https://e-commerce-backend-pk30.onrender.com"; 
+
+
+const socket = io(API_URL);
+// --- CONFIGURATION END ---
 
 function App() {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]); 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // NEW: State for filtering
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/products');
+        // Use the API_URL here instead of hardcoded localhost
+        const res = await axios.get(`${API_URL}/api/products`);
         setProducts(res.data);
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -37,12 +41,10 @@ function App() {
     return () => socket.off('stockUpdate');
   }, []);
 
-  // Filter Logic: If 'All' is selected, show everything. Otherwise, filter by category.
   const filteredProducts = selectedCategory === 'All' 
     ? products 
     : products.filter(p => p.category === selectedCategory);
 
-  // Get unique categories from the products list for the filter buttons
   const categories = ['All', ...new Set(products.map(p => p.category))];
 
   const addToCart = (product) => setCart([...cart, product]);
@@ -58,7 +60,6 @@ function App() {
         </div>
       </nav>
 
-      {/* NEW: Filter Section */}
       <div className="filter-bar">
         {categories.map(cat => (
           <button 
@@ -72,13 +73,17 @@ function App() {
       </div>
 
       <main className="product-grid">
-        {filteredProducts.map((product) => (
-          <ProductCard 
-            key={product._id} 
-            product={product} 
-            onAddToCart={() => addToCart(product)} 
-          />
-        ))}
+        {filteredProducts.length === 0 ? (
+          <p>Connecting to Cloud Server...</p>
+        ) : (
+          filteredProducts.map((product) => (
+            <ProductCard 
+              key={product._id} 
+              product={product} 
+              onAddToCart={() => addToCart(product)} 
+            />
+          ))
+        )}
       </main>
 
       <CartModal 

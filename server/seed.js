@@ -2,12 +2,11 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const Product = require('./models/Product');
 
-// Change this to your MongoDB Atlas URI if you are testing the cloud
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://utkarsha:Utkarsha%401403@cluster0.hbdlkgl.mongodb.net/simple-shop';
 
 const seedData = [
     { 
-        name: "iPhone 15 Pro", 
+        name: "iPhone 12 Pro", 
         price: 999, 
         stock: 10, 
         category: "Electronics", 
@@ -21,7 +20,23 @@ const seedData = [
         category: "Laptops", 
         description: "Supercharged by M3 chip, incredibly thin and fast for all-day use.",
         image: "https://images.unsplash.com/photo-1517336714460-45788a1f4b8d?q=80&w=500"
-    }
+    },
+    { 
+        name: "Sony WH-1000XM5", 
+        price: 349,
+        stock: 15,
+        category: "Accessories", 
+        description: "Industry-leading noise cancellation headphones with superior sound quality.",
+        image: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=500"    
+    },
+    { 
+        name: "Dell XPS 13",
+        price: 1099,
+        stock: 7,
+        category: "Laptops",
+        description: "Compact and powerful laptop with stunning InfinityEdge display.",
+        image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=500"
+    },
 ];
 
 const seedDB = async () => {
