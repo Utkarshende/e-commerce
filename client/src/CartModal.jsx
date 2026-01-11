@@ -1,60 +1,50 @@
-import axios from 'axios';
+import React from 'react';
 import './CartModal.css';
-import { loadStripe } from '@stripe/stripe-js';
 
-const CartModal = ({ isOpen, onClose, cartItems, total, clearCart }) => {
+const CartModal = ({ isOpen, onClose, cartItems, total, onCheckout, clearCart }) => {
   if (!isOpen) return null;
-
-
-const stripePromise = loadStripe('pk_test_your_publishable_key_here');
-
-const handleCheckout = async () => {
-    const stripe = await stripePromise;
-    
-    // Create the session on your backend
-    const response = await axios.post('http://localhost:5000/api/products/create-checkout-session', {
-        cartItems: cartItems
-    });
-
-    // Redirect to Stripe Checkout
-    const result = await stripe.redirectToCheckout({
-        sessionId: response.data.id,
-    });
-
-    if (result.error) {
-        alert(result.error.message);
-    }
-};
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Your Cart ({cartItems.length})</h2>
+          <h2>Your Selection</h2>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
-        
-        <div className="cart-items-list">
-          {cartItems.length === 0 ? <p>Your cart is empty.</p> : 
+
+        <div className="cart-items">
+          {cartItems.length === 0 ? (
+            <p className="empty-msg">Your cart is currently empty.</p>
+          ) : (
             cartItems.map((item, index) => (
               <div key={index} className="cart-item">
-                <span>{item.name}</span>
-                <span>${item.price}</span>
+                <img src={item.image} alt={item.name} className="cart-item-img" />
+                <div className="item-details">
+                  <h4>{item.name}</h4>
+                  <p>${item.price}</p>
+                </div>
               </div>
             ))
-          }
+          )}
         </div>
 
-        <div className="modal-footer">
-          <h3>Total: ${total}</h3>
-          <button 
-            className="checkout-btn" 
-            onClick={handleCheckout} 
-            disabled={cartItems.length === 0}
-          >
-            Proceed to Checkout
-          </button>
-        </div>
+        {cartItems.length > 0 && (
+          <div className="modal-footer">
+            <div className="total-section">
+              <span>Total:</span>
+              <span className="total-price">${total.toFixed(2)}</span>
+            </div>
+            
+            <div className="action-buttons">
+              <button className="clear-btn" onClick={clearCart}>
+                Clear All
+              </button>
+              <button className="checkout-btn" onClick={onCheckout}>
+                Proceed to Checkout
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

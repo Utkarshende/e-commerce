@@ -1,20 +1,26 @@
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(5px);
 }
 
 .modal-content {
   background: white;
-  padding: 25px;
-  border-radius: 12px;
-  width: 400px;
-  max-width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
 .modal-header {
@@ -22,40 +28,68 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-
-.close-btn {
-  background: none; border: none; font-size: 2rem; cursor: pointer;
-}
-
-.cart-items-list {
-  margin: 20px 0;
-  max-height: 300px;
-  overflow-y: auto;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .cart-item {
   display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px dashed #eee;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.cart-item-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .modal-footer {
+  margin-top: 20px;
   border-top: 1px solid #eee;
-  padding-top: 15px;
-  text-align: center;
+  padding-top: 20px;
+}
+
+.total-section {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 .checkout-btn {
-  background: #3498db;
+  flex: 2;
+  background: #000;
   color: white;
+  padding: 12px;
   border: none;
-  padding: 12px 30px;
-  border-radius: 6px;
-  width: 100%;
-  font-size: 1.1rem;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.checkout-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+.clear-btn {
+  flex: 1;
+  background: #f1f1f1;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
 }
