@@ -1,26 +1,30 @@
 import axios from 'axios';
 import './CartModal.css';
+import { loadStripe } from '@stripe/stripe-js';
 
 const CartModal = ({ isOpen, onClose, cartItems, total, clearCart }) => {
   if (!isOpen) return null;
 
-  const handleCheckout = async () => {
-    try {
-      // Send the cart data to our new backend route
-      const response = await axios.post('http://localhost:5000/api/checkout', {
-        items: cartItems,
-        total: total
-      });
 
-      if (response.data.success) {
-        alert("🎉 Purchase Successful!");
-        clearCart(); // Wipe the cart after buying
-        onClose();   // Close the modal
-      }
-    } catch (err) {
-      alert("Checkout failed. Is the server running?");
+const stripePromise = loadStripe('pk_test_your_publishable_key_here');
+
+const handleCheckout = async () => {
+    const stripe = await stripePromise;
+    
+    // Create the session on your backend
+    const response = await axios.post('http://localhost:5000/api/products/create-checkout-session', {
+        cartItems: cartItems
+    });
+
+    // Redirect to Stripe Checkout
+    const result = await stripe.redirectToCheckout({
+        sessionId: response.data.id,
+    });
+
+    if (result.error) {
+        alert(result.error.message);
     }
-  };
+};
 
   return (
     <div className="modal-overlay">
