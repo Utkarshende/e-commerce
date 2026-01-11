@@ -51,10 +51,13 @@ function App() {
     setUser(data.user);
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    setUser(null);
-  };
+const handleLogout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  setUser(null);
+  setCart([]); 
+  alert("You have been logged out safely.");
+};
 
   const confirmPayment = async () => {
     const newOrder = {
