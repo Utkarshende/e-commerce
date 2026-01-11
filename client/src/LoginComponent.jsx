@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import './LoginComponent.css';
 
 const LoginComponent = ({ onLogin, API_URL }) => {
   const [isRegister, setIsRegister] = useState(false);
