@@ -57,3 +57,34 @@
   background: black; color: white; border-radius: 50%;
   padding: 2px 7px; font-size: 0.7rem;
 }
+/* Add these styles to your App.css */
+
+.search-container {
+  flex: 0 1 400px; /* Growing to max 400px */
+  margin: 0 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: 1px solid #eee;
+  background: #f8f8f8;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.search-input:focus {
+  background: #fff;
+  border-color: #000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px;
+  color: #888;
+  font-style: italic;
+}
