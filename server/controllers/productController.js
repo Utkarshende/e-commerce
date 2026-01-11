@@ -1,5 +1,4 @@
 const Product = require('../models/Product');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const fs = require('fs');
 const path = require('path');
 

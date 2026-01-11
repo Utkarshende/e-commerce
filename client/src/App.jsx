@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import ProductCard from './ProductCard';
 import CartModal from './CartModal';
-import QRModal from './QRModal'; // NEW
+import QRModal from './QRModal';
 import './App.css';
 
 const API_URL = "https://e-commerce-backend-pk30.onrender.com"; 
@@ -12,7 +12,7 @@ const socket = io(API_URL);
 function App() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
-  const [orders, setOrders] = useState([]); // NEW: Order History State
+  const [orders, setOrders] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,7 +22,7 @@ function App() {
       try {
         const res = await axios.get(`${API_URL}/api/products`);
         setProducts(res.data);
-      } catch (err) { console.error(err); }
+      } catch (err) { console.error("Fetch Error:", err); }
     };
     fetchProducts();
 
@@ -32,53 +32,61 @@ function App() {
     return () => socket.off('stockUpdate');
   }, []);
 
-  // --- Logic Functions ---
-  const handleCheckoutClick = () => {
-    setIsCartOpen(false);
-    setIsQRModalOpen(true);
+  // --- Cart Logic (Quantity Handling) ---
+  const addToCart = (product) => {
+    setCart((prev) => {
+      const existing = prev.find(item => item._id === product._id);
+      if (existing) {
+        return prev.map(item => item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item);
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
   };
 
-  const confirmPayment = () => {
-    // Save to Order History
+  const decreaseQuantity = (id) => {
+    setCart((prev) => prev.map(item => item._id === id ? { ...item, quantity: item.quantity - 1 } : item)
+      .filter(item => item.quantity > 0));
+  };
+
+  const confirmPayment = async () => {
     const newOrder = {
       id: `#LUXE-${Math.floor(1000 + Math.random() * 9000)}`,
       date: new Date().toLocaleDateString(),
       items: [...cart],
-      total: cart.reduce((sum, i) => sum + i.price, 0)
+      total: cart.reduce((sum, i) => sum + (i.price * i.quantity), 0)
     };
     
+    // Optional: Tell backend to reduce stock
+    await axios.post(`${API_URL}/api/products/update-stock`, { items: cart });
+
     setOrders([newOrder, ...orders]);
     setCart([]);
     setIsQRModalOpen(false);
-    alert("🎉 Order Verified! Check your 'My Orders' section.");
+    alert("🎉 Order Verified! Thank you for shopping.");
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <div className="container">
       <nav className="navbar">
         <h1 className="logo">LUXE STORE</h1>
-        <input 
-          type="text" 
-          placeholder="Search..." 
-          className="search-input" 
-          onChange={(e) => setSearchQuery(e.target.value)} 
-        />
+        <div className="search-container">
+          <input type="text" placeholder="Search..." className="search-input" onChange={(e) => setSearchQuery(e.target.value)} />
+        </div>
         <div className="cart-icon" onClick={() => setIsCartOpen(true)}>
-          🛒 <span>{cart.length}</span>
+          🛒 <span className="cart-count">{cart.reduce((s, i) => s + i.quantity, 0)}</span>
         </div>
       </nav>
 
-      {/* NEW: Order History Section */}
       {orders.length > 0 && (
         <div className="order-history-banner">
-          <h3>My Orders ({orders.length})</h3>
+          <h3>My Orders</h3>
           <div className="orders-list">
-            {orders.map(order => (
-              <div key={order.id} className="order-mini-card">
-                <span>{order.id}</span> | <span>${order.total}</span> | <span className="status-tag">Processing</span>
+            {orders.map(o => (
+              <div key={o.id} className="order-mini-card">
+                <strong>{o.id}</strong> <br/> {o.date} - ${o.total.toFixed(2)}
               </div>
             ))}
           </div>
@@ -87,7 +95,7 @@ function App() {
 
       <main className="product-grid">
         {filteredProducts.map(p => (
-          <ProductCard key={p._id} product={p} onAddToCart={() => setCart([...cart, p])} />
+          <ProductCard key={p._id} product={p} onAddToCart={() => addToCart(p)} />
         ))}
       </main>
 
@@ -96,16 +104,13 @@ function App() {
         onClose={() => setIsCartOpen(false)} 
         cartItems={cart} 
         total={total} 
-        onCheckout={handleCheckoutClick} // Changed to open QR
+        onIncrease={addToCart}
+        onDecrease={decreaseQuantity}
+        onCheckout={() => { setIsCartOpen(false); setIsQRModalOpen(true); }}
         clearCart={() => setCart([])}
       />
 
-      <QRModal 
-        isOpen={isQRModalOpen} 
-        onClose={() => setIsQRModalOpen(false)} 
-        total={total}
-        onConfirm={confirmPayment}
-      />
+      <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} total={total} onConfirm={confirmPayment} />
     </div>
   );
 }
