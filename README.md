@@ -49,9 +49,9 @@ Environment Variables: Secure management of API keys and database strings.
 ## ⚙️ Installation & Setup
 1. Clone the repository:
    
-git clone https://github.com/your-username/luxe-store.git
+git clone https:https://github.com/Utkarshende/luxe-store.git
 
-2. Install Dependencies:
+1. Install Dependencies:
 
 Root folder -
 npm install
