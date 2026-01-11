@@ -49,18 +49,20 @@ Environment Variables: Secure management of API keys and database strings.
 ## ⚙️ Installation & Setup
 1. Clone the repository:
    
-git clone https:https://github.com/Utkarshende/luxe-store.git
+### [🔗 git clone https](https://github.com/Utkarshende/luxe-store.git)
 
 1. Install Dependencies:
 
 Root folder -
-npm install
+npm install 
+
 Client folder -
 cd client && npm install
+
 Server folder -
 cd ../server && npm install
 
-3. Environment Variables: Create a .env file in the /server directory:
+2. Environment Variables: Create a .env file in the /server directory:
 
 MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_secret_key
@@ -68,15 +70,16 @@ CLOUDINARY_CLOUD_NAME=your_name
 CLOUDINARY_API_KEY=your_key
 CLOUDINARY_API_SECRET=your_secret
 
-4. Run the Application:
+3. Run the Application:
 
-// From the root
+From the root
+
 npm run dev
 
 ## 👤 Author
 
 Utkarsha Shende Full-Stack Developer 
 
-https://www.linkedin.com/in/utkarsha-shende-344b57231/ 
+### [Linkedin](https://www.linkedin.com/in/utkarsha-shende-344b57231/ )
 
-https://utkarsha-s-portfolio.netlify.app/
+### [Portfolio](https://utkarsha-s-portfolio.netlify.app/)
