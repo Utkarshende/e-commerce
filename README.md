@@ -53,11 +53,11 @@ git clone https://github.com/your-username/luxe-store.git
 
 2. Install Dependencies:
 
-// Root folder
+Root folder -
 npm install
-// Client folder
+Client folder -
 cd client && npm install
-//Server folder
+Server folder -
 cd ../server && npm install
 
 3. Environment Variables: Create a .env file in the /server directory:
