@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 
 const productController = require('./controllers/productController');
+const productRoutes = require('./routes/productRoutes'); // Import the new file
 
 const app = express();
 const server = http.createServer(app);
@@ -44,6 +45,7 @@ app.use(cors({
 // --- CORRECTION END ---
 
 app.use(express.json());
+app.use('/api/products', productRoutes(io));
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/simple-shop';
 mongoose.connect(MONGO_URI)
