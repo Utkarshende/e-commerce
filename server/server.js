@@ -46,6 +46,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/api/products', productRoutes(io));
+app.use('/api/auth', require('./routes/authRoutes'));
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/simple-shop';
 mongoose.connect(MONGO_URI)
