@@ -52,7 +52,7 @@ mongoose.connect(MONGO_URI)
     .then(() => console.log("🚀 High-End DB Connected"))
     .catch(err => console.error("❌ DB Connection Error:", err));
 
-app.get('/api/products', productController.getProducts);
+// Routes are registered via productRoutes; no duplicate app.get here
 app.post('/api/checkout', (req, res) => productController.checkout(req, res, io));
 
 const PORT = process.env.PORT || 5000;

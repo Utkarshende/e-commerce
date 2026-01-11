@@ -9,6 +9,9 @@ module.exports = (io) => {
     // GET: http://localhost:5000/api/products
     router.get('/', productController.getProducts);
 
+    // GET: http://localhost:5000/api/products/:id
+    router.get('/:id', productController.getProductById);
+
     // POST: http://localhost:5000/api/products/checkout
     // (Existing manual checkout)
     router.post('/checkout', (req, res) => productController.checkout(req, res, io));
