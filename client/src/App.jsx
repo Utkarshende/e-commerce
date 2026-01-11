@@ -5,7 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import ProductCard from './ProductCard';
 import CartModal from './CartModal';
 import './App.css';
-
+import QRModal from './QRModal'; // Don't forget to import!
 // Replace with your actual Stripe Publishable Key
 const stripePromise = loadStripe('pk_test_your_publishable_key_here');
 
@@ -17,6 +17,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]); 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   
   // States for Search and Filtering
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -33,6 +34,11 @@ function App() {
       }
     };
     fetchProducts();
+
+    const handleCheckout = () => {
+  setIsModalOpen(false); // Close the cart
+  setIsQRModalOpen(true); // Open the QR code
+};
 
     // 2. Check for Stripe Success/Cancel URLs
     const query = new URLSearchParams(window.location.search);
@@ -150,6 +156,16 @@ function App() {
         onCheckout={handleCheckout} // Pass Stripe function to Modal
         clearCart={clearCart}
       />
+      <QRModal 
+  isOpen={isQRModalOpen} 
+  onClose={() => setIsQRModalOpen(false)} 
+  total={total}
+  onConfirm={() => {
+    alert("🎉 Payment Received! Your order is being processed.");
+    setCart([]);
+    setIsQRModalOpen(false);
+  }}
+/>
     </div>
   );
 }

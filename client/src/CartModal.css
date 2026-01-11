@@ -93,3 +93,30 @@
   border-radius: 8px;
   cursor: pointer;
 }
+.qr-content {
+  text-align: center;
+}
+
+.qr-body {
+  padding: 20px 0;
+}
+
+.total-label {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.qr-frame {
+  background: white;
+  padding: 15px;
+  display: inline-block;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.qr-instructions {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
