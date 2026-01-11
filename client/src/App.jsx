@@ -16,6 +16,7 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [user, setUser] = useState(null); // Track logged-in user
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -55,7 +56,14 @@ function App() {
       items: [...cart],
       total: cart.reduce((sum, i) => sum + (i.price * i.quantity), 0)
     };
-    
+    const handleLogin = async (email, password) => {
+    const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
+    localStorage.setItem('token', res.data.token); // Save session
+    setUser(res.data.user);
+};
+if (!user) {
+    return <LoginComponent onLogin={handleLogin} />;
+}    
     // Optional: Tell backend to reduce stock
     await axios.post(`${API_URL}/api/products/update-stock`, { items: cart });
 
