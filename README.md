@@ -78,8 +78,6 @@ npm run dev
 
 ## 👤 Author
 
-Utkarsha Shende Full-Stack Developer 
-
+Utkarsha Shende - Full-Stack Developer 
 ### [Linkedin](https://www.linkedin.com/in/utkarsha-shende-344b57231/ )
-
 ### [Portfolio](https://utkarsha-s-portfolio.netlify.app/)
