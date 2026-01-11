@@ -1,10 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const auth = require('../middleware/authMiddleware'); // Import the shield
 
 module.exports = (io) => {
-    router.get('/', productController.getProducts);
-    // New endpoint for QR payment confirmation stock update
-    router.post('/update-stock', (req, res) => productController.updateStock(req, res, io));
+    // Only logged in users can GET products
+    router.get('/', auth, productController.getProducts);
+
+    // Only logged in users can UPDATE stock
+    router.post('/update-stock', auth, (req, res) => 
+        productController.updateStock(req, res, io)
+    );
+
     return router;
 };
