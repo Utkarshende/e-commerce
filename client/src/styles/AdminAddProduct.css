@@ -1,16 +1,18 @@
-    .admin-form-container {
-  max-width: 500px;
+.admin-form-container {
+  max-width: 700px;
   margin: 40px auto;
   padding: 40px;
-  background: #fff;
-  border: 1px solid #eee;
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
 }
 
 .admin-form-container h3 {
   font-family: 'Playfair Display', serif;
   text-align: center;
   margin-bottom: 30px;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
+  font-size: 1.2rem;
 }
 
 .luxe-form {
@@ -19,13 +21,23 @@
   gap: 15px;
 }
 
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row input {
+  flex: 1;
+}
+
 .luxe-form input, .luxe-form textarea, .luxe-form select {
-  padding: 12px;
+  padding: 15px;
   border: 1px solid #eee;
-  font-family: inherit;
-  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
   outline: none;
-  transition: border 0.3s;
+  transition: all 0.3s;
 }
 
 .luxe-form input:focus {
@@ -35,16 +47,18 @@
 .admin-submit-btn {
   background: #1a1a1a;
   color: white;
-  padding: 15px;
+  padding: 18px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 0.8rem;
+  letter-spacing: 3px;
+  font-size: 0.75rem;
+  font-weight: 700;
   border: none;
   cursor: pointer;
   margin-top: 10px;
-  transition: background 0.3s;
+  transition: all 0.4s;
 }
 
 .admin-submit-btn:hover {
   background: #d4af37;
+  transform: translateY(-2px);
 }
