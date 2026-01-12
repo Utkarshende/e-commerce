@@ -4,55 +4,61 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(5px);
-  z-index: 9999; /* Ensure it's above everything */
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
   display: flex;
   justify-content: flex-end;
 }
 
 .cart-panel {
   width: 100%;
-  max-width: 400px; /* Limits width on desktop */
-  background: #fff;
-  height: 100vh;
-  padding: 30px;
+  max-width: 420px;
+  background: #ffffff;
+  height: 100vh; /* Takes full height of the viewport */
   display: flex;
-  flex-direction: column;
-  box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+  flex-direction: column; /* This allows the vertical stack */
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
   animation: slideInRight 0.3s ease-out;
 }
 
-.cart-items {
-  flex-grow: 1; /* Pushes footer to bottom */
-  overflow-y: auto; /* Allows scrolling if many items */
-  margin-bottom: 20px;
-  padding-right: 10px;
+.cart-header {
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
 }
 
-/* Custom scrollbar for luxury feel */
-.cart-items::-webkit-scrollbar { width: 3px; }
-.cart-items::-webkit-scrollbar-thumb { background: #d4af37; }
+/* --- THE FIX --- */
+.cart-items {
+  flex: 1; /* This tells the items to take up all available middle space */
+  overflow-y: auto; /* Adds scrollbar only to the items list */
+  padding: 20px 30px;
+}
 
 .cart-footer {
-  border-top: 1px solid #eee;
-  padding-top: 20px;
+  padding: 30px;
   background: #fff;
+  border-top: 1px solid #eee;
+  /* This stays at the bottom because .cart-items is flex: 1 */
 }
 
 .checkout-btn {
   width: 100%;
-  padding: 18px;
+  padding: 20px;
   background: #1a1a1a;
   color: #fff;
   border: none;
   font-weight: 700;
   letter-spacing: 2px;
   cursor: pointer;
-  transition: opacity 0.3s;
+  transition: background 0.3s;
 }
 
-.checkout-btn:hover { opacity: 0.9; }
+.checkout-btn:hover {
+  background: #d4af37;
+}
 
 @keyframes slideInRight {
   from { transform: translateX(100%); }
