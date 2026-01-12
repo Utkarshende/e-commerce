@@ -18,7 +18,7 @@ import CartModal from './components/modals/CartModal';
 import QRModal from './components/modals/QRModal';
 
 // Auth & Style
-import LoginComponent from './LoginComponent';
+import LoginComponent from './pages/LoginComponent';
 import './styles/App.css';
 
 const API_URL = "https://e-commerce-backend-pk30.onrender.com";

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './AdminAddProduct.css';
+import '../../styles/AdminAddProduct.css';
 
 const AdminAddProduct = ({ API_URL, onProductAdded }) => {
   const [formData, setFormData] = useState({
