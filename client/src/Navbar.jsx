@@ -16,7 +16,8 @@ const Navbar = ({ cartCount, onCartClick, onLogout, user, onSearch }) => {
         </div>
 
         <div className="nav-tools">
-          <span className="user-welcome">Hello, {user?.name}</span>
+          <span className="user-welcome">Hello, {user?.name || 'Guest'}</span>
+          
           <div className="cart-trigger" onClick={onCartClick}>
             <span className="cart-label">Bag</span>
             <div className="cart-badge-container">
@@ -24,6 +25,7 @@ const Navbar = ({ cartCount, onCartClick, onLogout, user, onSearch }) => {
               {cartCount > 0 && <span className="badge">{cartCount}</span>}
             </div>
           </div>
+
           <button className="nav-logout" onClick={onLogout}>Logout</button>
         </div>
       </div>

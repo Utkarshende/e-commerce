@@ -1,22 +1,81 @@
-/* Navbar Styling */
-.luxe-navbar {
-  position: sticky;
-  top: 0;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid #eee;
-  padding: 1rem 0;
-  z-index: 1000;
-}
-
+/* Container for the whole navbar */
 .nav-container {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 40px; /* Increased padding for more space */
 }
 
-.nav-brand { font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; }
-.nav-brand span { font-weight: 300; color: #888; }
+/* Grouping the User, Bag, and Logout */
+.nav-tools {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; /* This is the "Magic" spacing - gives 40px between items */
+}
+
+.user-welcome {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #444;
+  white-space: nowrap; /* Prevents name from wrapping */
+}
+
+/* Specific styling for the Bag/Cart trigger */
+.cart-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between "Bag" text and icon */
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cart-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.cart-badge-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bag-icon {
+  font-size: 1.4rem;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #d4af37; /* Luxe Gold */
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* Logout button refinement */
+.nav-logout {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 8px 18px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-logout:hover {
+  background: #000;
+  color: #fff;
+}
