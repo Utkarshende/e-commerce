@@ -9,6 +9,7 @@ const AdminAddProduct = ({ API_URL, onProductAdded }) => {
     description: '',
     category: 'Signature',
     image: '',
+     backImage: '',
     stock: 10
   });
 
@@ -43,7 +44,12 @@ const AdminAddProduct = ({ API_URL, onProductAdded }) => {
 
         <input type="text" placeholder="Image URL (Unsplash link)" value={formData.image} onChange={(e) => setFormData({...formData, image: e.target.value})} required />
         <input type="number" placeholder="Stock Quantity" value={formData.stock} onChange={(e) => setFormData({...formData, stock: e.target.value})} required />
-        
+        <input 
+  type="text" 
+  placeholder="Back Image URL (Optional)" 
+  value={formData.backImage} 
+  onChange={(e) => setFormData({...formData, backImage: e.target.value})} 
+/>
         <button type="submit" className="admin-submit-btn">Publish to Store</button>
       </form>
     </div>

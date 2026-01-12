@@ -157,3 +157,46 @@
 .product-card:nth-child(4) { animation-delay: 0.2s; }
 .product-card:nth-child(5) { animation-delay: 0.25s; }
 .product-card:nth-child(6) { animation-delay: 0.3s; }
+
+/* ... Keep the rest of your ProductCard.css as we corrected before ... */
+
+.product-image-container {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background: #f9f9f9;
+  position: relative; /* Required for absolute positioning of secondary image */
+}
+
+.product-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.6s ease, transform 1.2s cubic-bezier(0, 0, 0.2, 1);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Primary is visible by default */
+.product-card-img.primary {
+  z-index: 2;
+  opacity: 1;
+}
+
+/* Secondary is hidden by default */
+.product-card-img.secondary {
+  z-index: 1;
+  opacity: 0;
+  transform: scale(1.1); /* Slightly zoomed for a "reveal" effect */
+}
+
+/* Hover States */
+.product-card:hover .product-card-img.primary {
+  opacity: 0;
+}
+
+.product-card:hover .product-card-img.secondary {
+  opacity: 1;
+  transform: scale(1); /* Zooms out slightly into focus */
+}

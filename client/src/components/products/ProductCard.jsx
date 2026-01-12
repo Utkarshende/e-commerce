@@ -1,5 +1,7 @@
 import React from 'react';
-import '../../styles/ProductCard.css';
+import '<div styleName={} />
+<div styleName={} />
+<styles></styles>/ProductCard.css';
 
 const ProductCard = ({ product, onAddToCart, isAdmin, onDelete }) => {
   return (
@@ -11,22 +13,35 @@ const ProductCard = ({ product, onAddToCart, isAdmin, onDelete }) => {
       )}
       
       <div className="product-image-container">
-        <img src={product.image} alt={product.name} className="product-card-img" />
+        {/* Main Image */}
+        <img src={product.image} alt={product.name} className="product-card-img primary" />
+        
+        {/* Secondary Image (Swap) - Fallback to primary if backImage doesn't exist */}
+        <img 
+          src={product.backImage || product.image} 
+          alt={`${product.name} view 2`} 
+          className="product-card-img secondary" 
+        />
       </div>
 
-      <div className="product-info-overlay">
+      <div className="product-info">
+        <span className="product-category">{product.category}</span>
         <h3 className="product-name">{product.name}</h3>
-        <span className="product-price">${product.price}</span>
+        <p className="product-price">${product.price}</p>
         
-        {product.stock > 0 ? (
-          <button className="add-to-cart-btn" onClick={onAddToCart}>
-            Add to Bag
-          </button>
-        ) : (
-          <button className="add-to-cart-btn sold-out" disabled>
-            Sold Out
-          </button>
-        )}
+        <div className="product-details-row">
+          <span className={`product-stock ${product.stock < 5 ? 'stock-low' : ''}`}>
+            {product.stock > 0 ? `${product.stock} in stock` : 'Out of Stock'}
+          </span>
+        </div>
+
+        <button 
+          className="add-to-cart-btn" 
+          onClick={onAddToCart}
+          disabled={product.stock <= 0}
+        >
+          {product.stock > 0 ? 'Add to Bag' : 'Sold Out'}
+        </button>
       </div>
     </div>
   );
