@@ -37,8 +37,10 @@ exports.updateStock = async (req, res, io) => {
     const { id, quantity } = req.body;
     
     try {
-        // Find product and subtract the quantity
-        // { $inc: { stock: -quantity } } subtracts the number safely
+        // 1. Validation: Ensure ID exists
+        if (!id) return res.status(400).json({ message: "Product ID is required" });
+
+        // 2. Update DB: Atomic decrement
         const product = await Product.findByIdAndUpdate(
             id, 
             { $inc: { stock: -Number(quantity) } }, 
@@ -46,22 +48,21 @@ exports.updateStock = async (req, res, io) => {
         );
 
         if (!product) {
-            return res.status(404).json({ message: "Product not found" });
+            return res.status(404).json({ message: "Product not found in database" });
         }
 
-        // EMIT REAL-TIME UPDATE
+        // 3. Socket Notification (Safety Check)
         if (io) {
             io.emit('stockUpdate', { id: product._id, newStock: product.stock });
+        } else {
+            console.log("Warning: Socket.io (io) is not defined in controller");
         }
 
-        return res.status(200).json({ 
-            success: true, 
-            message: "Stock updated", 
-            newStock: product.stock 
-        });
+        return res.status(200).json({ success: true, newStock: product.stock });
+
     } catch (err) {
-        console.error("Stock Update Error:", err);
-        return res.status(500).json({ message: "Database update failed" });
+        console.error("Critical Update Error:", err);
+        return res.status(500).json({ message: "Internal Server Error", error: err.message });
     }
 };
 
