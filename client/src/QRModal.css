@@ -1,0 +1,99 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px); /* Modern blur effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content.qr-content {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.qr-body {
+  margin: 20px 0;
+}
+
+.total-display {
+  font-size: 1.2rem;
+  margin: 15px 0;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  color: #333;
+}
+
+.total-display strong {
+  color: #d4af37; /* Luxury Gold Color */
+  font-size: 1.4rem;
+}
+
+.qr-placeholder {
+  background: #fff;
+  padding: 15px;
+  display: inline-block;
+  border: 2px solid #eee;
+  border-radius: 15px;
+  margin: 15px 0;
+}
+
+.qr-img {
+  width: 200px;
+  height: 200px;
+  display: block;
+}
+
+.instruction {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.confirm-btn {
+  width: 100%;
+  padding: 12px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 10px;
+}
+
+.confirm-btn:hover {
+  background: #218838;
+}
+
+.cancel-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #f8f9fa;
+}
