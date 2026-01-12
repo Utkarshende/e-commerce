@@ -36,7 +36,7 @@ const LoginComponent = ({ onLogin, API_URL }) => {
           <p>ESTABLISHED MMXXIV</p>
         </div>
       </div>
-
+a
       {/* Right Section: Refined Form */}
       <div className="auth-form-side">
         <div className="form-content-reveal">
