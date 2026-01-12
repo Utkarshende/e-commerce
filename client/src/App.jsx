@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import ProductCard from './ProductCard';
 import CartModal from './CartModal';
 import QRModal from './QRModal';
 import LoginComponent from './LoginComponent';
-import Spinner from './Spinner'; // Import your new Spinner
 import './App.css';
 
+// Ensure this matches your Render Backend URL exactly
 const API_URL = "https://e-commerce-backend-pk30.onrender.com"; 
 const socket = io(API_URL);
 
@@ -20,28 +20,31 @@ function App() {
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // 1. Memoized Header Function (Prevents recreation on every render)
-  const getAuthHeader = useCallback(() => ({
-    headers: { 'x-auth-token': localStorage.getItem('token') }
-  }), []);
+  // 1. Helper to get the auth token from storage
+  const getAuthHeader = useCallback(() => {
+    const token = localStorage.getItem('token');
+    return { headers: { 'x-auth-token': token } };
+  }, []);
 
-  // 2. Fetch Products Function
+  // 2. Fetch Products (Only called when authenticated)
   const fetchProducts = useCallback(async () => {
-    if (!localStorage.getItem('token')) return;
-    
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
     try {
       setLoading(true);
       const res = await axios.get(`${API_URL}/api/products`, getAuthHeader());
       setProducts(res.data);
     } catch (err) {
       console.error("Fetch error:", err);
+      // If unauthorized (401), force a logout
       if (err.response?.status === 401) handleLogout();
     } finally {
       setLoading(false);
     }
   }, [getAuthHeader]);
 
-  // 3. Effect for Initialization and Socket
+  // 3. Initial Load: Check for existing session and Setup Socket
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
@@ -51,13 +54,15 @@ function App() {
     }
 
     socket.on('stockUpdate', (data) => {
-      setProducts(prev => prev.map(p => p._id === data.id ? { ...p, stock: data.newStock } : p));
+      setProducts(prev => prev.map(p => 
+        p._id === data.id ? { ...p, stock: data.newStock } : p
+      ));
     });
 
     return () => socket.off('stockUpdate');
-  }, []); // Only runs once on mount
+  }, []);
 
-  // 4. Effect to fetch products ONLY when user state changes
+  // 4. Fetch products whenever the user state becomes valid
   useEffect(() => {
     if (user) {
       fetchProducts();
@@ -71,13 +76,15 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
     setProducts([]);
     setCart([]);
   };
 
   const addToCart = (p) => {
+    if (p.stock <= 0) return alert("Item out of stock!");
     setCart(prev => {
       const exist = prev.find(item => item._id === p._id);
       if (exist) return prev.map(item => item._id === p._id ? { ...item, quantity: item.quantity + 1 } : item);
@@ -100,62 +107,48 @@ function App() {
       localStorage.setItem('user', JSON.stringify(updatedUser));
       setCart([]);
       setIsQRModalOpen(false);
-      alert("Payment Confirmed! Stock Updated.");
+      alert("Success! Your order is confirmed.");
     } catch (err) {
-      alert("Payment failed. Please login again.");
+      alert("Payment failed. Please log in again.");
       handleLogout();
     }
   };
 
-  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredProducts = products.filter(p => 
+    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  // Render Login if no user
-  if (!user) return <LoginComponent onLogin={handleLoginData} API_URL={API_URL} />;
+  // If not logged in, show login screen
+  if (!user) {
+    return <LoginComponent onLogin={handleLoginData} API_URL={API_URL} />;
+  }
 
   return (
-    <div className="container">
+    <div className="app-container">
       <nav className="navbar">
         <h1 className="logo">LUXE STORE</h1>
         <input 
           type="text" 
-          className="search-input" 
-          placeholder="Search collections..." 
+          placeholder="Search items..." 
+          className="search-bar"
           onChange={(e) => setSearchQuery(e.target.value)} 
         />
-        <div className="nav-actions">
-          <span className="user-name">Welcome, {user.name}</span>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
-          <div className="cart-icon" onClick={() => setIsCartOpen(true)}>
-            🛒 <span className="cart-badge">{cart.reduce((s, i) => s + i.quantity, 0)}</span>
+        <div className="nav-right">
+          <span>Hello, {user.name}</span>
+          <button onClick={handleLogout} className="logout-link">Logout</button>
+          <div className="cart-trigger" onClick={() => setIsCartOpen(true)}>
+             🛒 ({cart.reduce((s, i) => s + i.quantity, 0)})
           </div>
         </div>
       </nav>
 
-      {user.orders?.length > 0 && (
-        <div className="order-history-banner">
-          <h3>Recent Purchases</h3>
-          <div className="orders-list">
-            {user.orders.slice(0, 3).map((o, i) => (
-              <div key={i} className="order-mini-card">
-                <strong>{o.id}</strong> | ${o.total.toFixed(2)}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {loading ? (
-        <Spinner />
+        <div className="loading-state">Loading Premium Collections...</div>
       ) : (
         <main className="product-grid">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map(p => (
-              <ProductCard key={p._id} product={p} onAddToCart={() => addToCart(p)} />
-            ))
-          ) : (
-            <p className="no-results">No products found matching your search.</p>
-          )}
+          {filteredProducts.map(p => (
+            <ProductCard key={p._id} product={p} onAddToCart={() => addToCart(p)} />
+          ))}
         </main>
       )}
 
@@ -163,17 +156,12 @@ function App() {
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)} 
         cartItems={cart} 
-        total={total}
-        onIncrease={addToCart} 
-        onDecrease={(id) => setCart(c => c.map(i => i._id === id ? {...i, quantity: i.quantity-1} : i).filter(i => i.quantity > 0))}
         onCheckout={() => { setIsCartOpen(false); setIsQRModalOpen(true); }} 
-        clearCart={() => setCart([])}
       />
 
       <QRModal 
         isOpen={isQRModalOpen} 
         onClose={() => setIsQRModalOpen(false)} 
-        total={total} 
         onConfirm={confirmPayment} 
       />
     </div>

@@ -5,7 +5,8 @@ const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
 
-// Import Routes
+// Import Routes CLIENT_URL=https://shop-e-mern.netlify.app/
+
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 
