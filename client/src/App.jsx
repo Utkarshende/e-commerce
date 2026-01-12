@@ -44,11 +44,11 @@ function App() {
 
     try {
       setLoading(true);
-      const res = await axios.get(`${API_URL}/api/products`, {
-        headers: { 
-          'x-auth-token': token,
-          'Authorization': `Bearer ${token}` 
-        }
+      // Inside fetchProducts in App.jsx
+const res = await axios.get(`${API_URL}/api/products`, {
+    headers: { 
+        'x-auth-token': token // Remove the 'Authorization' line to prevent the preflight clash
+    }
       });
       setProducts(res.data);
     } catch (err) {

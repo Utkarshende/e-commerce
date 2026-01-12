@@ -30,7 +30,7 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -38,7 +38,14 @@ app.use(cors({
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'] // THIS LINE IS THE FIX
+    allowedHeaders: [
+        'Content-Type', 
+        'Authorization', 
+        'x-auth-token', 
+        'Accept', 
+        'Origin'
+    ],
+    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 }));
 
 // 4. Database Connection

@@ -1,19 +1,18 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-    // Look for the token in the request headers
-    const token = req.header('x-auth-token');
+    // Check for token in multiple possible header locations
+    const token = req.header('x-auth-token') || req.header('Authorization')?.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ message: 'No token, access denied' });
+        return res.status(401).json({ message: "No token, authorization denied" });
     }
 
     try {
-        // Verify the token using the secret key
-        const decoded = jwt.verify(token, 'YOUR_SECRET_KEY');
-        req.user = decoded.id; // Add user ID to the request
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
         next();
     } catch (err) {
-        res.status(401).json({ message: 'Token is not valid' });
+        res.status(401).json({ message: "Token is not valid" });
     }
 };
