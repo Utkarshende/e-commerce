@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+    animation: luxeFadeUp 0.8s cubic-bezier(0.2, 1, 0.3, 1) both;
 }
 
 .product-card:hover {
@@ -201,3 +202,21 @@
   background: #ccc;
   cursor: not-allowed;
 }
+/* Animation for the card reveal */
+@keyframes luxeFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}a
+/* Staggered delay for a premium feel (first 6 items) */
+.product-card:nth-child(1) { animation-delay: 0.1s; }
+.product-card:nth-child(2) { animation-delay: 0.2s; }
+.product-card:nth-child(3) { animation-delay: 0.3s; }
+.product-card:nth-child(4) { animation-delay: 0.4s; }
+.product-card:nth-child(5) { animation-delay: 0.5s; }
+.product-card:nth-child(6) { animation-delay: 0.6s; }

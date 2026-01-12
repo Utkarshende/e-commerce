@@ -1,4 +1,4 @@
-const products = [
+const productsData = [
   // --- SIGNATURE CATEGORY ---
   {
     name: "Aurelius Chronograph",
