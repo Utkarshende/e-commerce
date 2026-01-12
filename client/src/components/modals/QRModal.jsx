@@ -1,5 +1,5 @@
 import React from 'react';
-import './QRModal.css';
+import '../../styles/QRModal.css';
 
 const QRModal = ({ isOpen, onClose, total = 0, onConfirm }) => {
   if (!isOpen) return null;
@@ -8,7 +8,7 @@ const QRModal = ({ isOpen, onClose, total = 0, onConfirm }) => {
     <div className="modal-overlay">
       <div className="modal-content qr-content">
         <div className="modal-header">
-          <h2>Scan to Pay</h2>
+          <h2>Scan to Pay</h2>  
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
 

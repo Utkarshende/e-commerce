@@ -1,5 +1,5 @@
 import React from 'react';
-import './ProductCard.css';
+import '../../styles/ProductCard.css'; // Use ../.. to go up two levels to src, then into styles
 
 const ProductCard = ({ product, onAddToCart }) => {
   const isOutOfStock = product.stock <= 0;

@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
-
 // 1. Layout Components
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import BackToTop from './components/layout/BackToTop';
+import WelcomeToast from './components/layout/WelcomeToast';
 
-// 2. Product Components
+// Product Components
 import ProductCard from './components/products/ProductCard';
 import Spinner from './components/products/Spinner';
 
-// 3. Modal Components
+// Modal Components
 import CartModal from './components/modals/CartModal';
 import QRModal from './components/modals/QRModal';
 
-// 4. Auth & Styles
-import LoginComponent from './LoginComponent'; // Move this to /pages later if desired
+// Styles (reaching into the styles folder)
 import './styles/App.css';
+import './styles/Navbar.css';
 
 const API_URL = "https://e-commerce-backend-pk30.onrender.com";
 const socket = io(API_URL);
@@ -116,6 +116,7 @@ function App() {
 
   return (
     <div className="app-wrapper">
+      {user && <WelcomeToast userName={user.name} />}
       <Navbar 
         scrolled={scrolled} 
         user={user} 
