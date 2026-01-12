@@ -5,18 +5,16 @@ const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
 
-// Import Routes CLIENT_URL=https://shop-e-mern.netlify.app/
-
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 
 const app = express();
 const server = http.createServer(app);
 
-// 1. Socket.io Configuration
+// 1. Socket.io Configuration (Updated with your Netlify URL)
 const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:5173", "https://your-frontend-link.onrender.com"], // Replace with your actual frontend URL
+        origin: ["http://localhost:5173", "https://shop-e-mern.netlify.app"],
         methods: ["GET", "POST"]
     }
 });
@@ -24,41 +22,45 @@ const io = new Server(server, {
 // 2. Middleware
 app.use(express.json());
 
-// Professional CORS setup
-const allowedOrigins = ['http://localhost:5173', 'https://your-frontend-link.onrender.com'];
+// 3. Updated CORS Setup (Ensures Netlify can talk to Render)
+const allowedOrigins = [
+    'http://localhost:5173', 
+    'https://shop-e-mern.netlify.app'
+];
+
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
         }
+        return callback(null, true);
     },
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'x-auth-token'] // Matches what App.jsx sends
 }));
 
-// 3. Database Connection
+// 4. Database Connection
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ MongoDB Connected Successfully"))
     .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
-// 4. Socket.io Connection Logic
+// 5. Socket Logic
 io.on('connection', (socket) => {
     console.log(`📡 New Client Connected: ${socket.id}`);
-    socket.on('disconnect', () => console.log('🔌 Client Disconnected'));
 });
 
-// 5. Routes Initialization
-// Injecting 'io' into productRoutes so it can emit stock updates
+// 6. Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes(io));
 
-// 6. Base Route for Health Check
 app.get('/', (req, res) => {
     res.send('Luxe Store API is running...');
 });
 
-// 7. Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
