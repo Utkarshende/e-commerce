@@ -8,6 +8,7 @@ import CartModal from './CartModal';
 import QRModal from './QRModal';
 import LoginComponent from './LoginComponent';
 import './App.css';
+import Footer from './Footer';
 
 const API_URL = "https://e-commerce-backend-pk30.onrender.com";
 const socket = io(API_URL);
@@ -106,6 +107,8 @@ function App() {
           {filteredProducts.map(p => <ProductCard key={p._id} product={p} onAddToCart={() => addToCart(p)} />)}
         </div>
       </main>
+
+      <Footer />
 
       <CartModal 
         isOpen={isCartOpen} 
