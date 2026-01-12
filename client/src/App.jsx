@@ -9,6 +9,7 @@ import QRModal from './QRModal';
 import LoginComponent from './LoginComponent';
 import './App.css';
 import Footer from './Footer';
+import BackToTop from './BackToTop';
 
 const API_URL = "https://e-commerce-backend-pk30.onrender.com";
 const socket = io(API_URL);
@@ -109,6 +110,7 @@ function App() {
       </main>
 
       <Footer />
+      <BackToTop />
 
       <CartModal 
         isOpen={isCartOpen} 
