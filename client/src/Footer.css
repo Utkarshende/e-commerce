@@ -1,65 +1,100 @@
-.simple-footer {
-  padding: 60px 20px 40px;
-  text-align: center;
-  background: #242323;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+.luxe-footer {
+  background: #fafafa; /* Very light grey, almost white */
+  padding: 100px 60px 40px;
+  border-top: 1px solid #eee;
+  margin-top: 120px;
 }
 
-.footer-line {
-  height: 1px;
-  width: 100px;
-  background: #eee;
-  margin: 0 auto 40px;
-}
-
-.footer-content {
-  max-width: 600px;
+.footer-top {
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-.footer-brand {
+.footer-logo {
   font-family: 'Playfair Display', serif;
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 5px;
+  margin-bottom: 10px;
 }
 
-.footer-brand span {
-  color: #d4af37;
+.footer-logo span {
   font-weight: 300;
+  color: #d4af37; /* The signature gold */
 }
 
-.footer-links {
+.footer-tagline {
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+  font-family: 'Playfair Display', serif;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 80px;
+}
+
+.footer-column h5 {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+  color: #1a1a1a;
+}
+
+.footer-column p {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.footer-column p:hover {
+  color: #d4af37;
+}
+
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d4af37, transparent);
+  opacity: 0.2;
+  margin: 60px auto;
+  max-width: 1400px;
+}
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.social-links {
   display: flex;
   gap: 30px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
+}
+
+.social-links span {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: #1a1a1a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.copyright-text {
+  font-size: 0.7rem;
   letter-spacing: 1px;
-  color: #888;
+  color: #aaa;
 }
 
-.footer-links span {
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-.footer-links span:hover {
-  color: #d4af37;
-}
-
-.footer-socials {
-  display: flex;
-  gap: 20px;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.copyright {
-  margin-top: 40px;
-  font-size: 0.75rem;
-  color: #bbb;
-  font-weight: 300;
+@media (max-width: 768px) {
+  .footer-top { flex-direction: column; gap: 50px; }
+  .footer-nav { gap: 40px; }
 }
