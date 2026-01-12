@@ -69,7 +69,6 @@ function App() {
     if (token && savedUser) {
       setUser(JSON.parse(savedUser));
     }
-    
     setIsInitializing(false);
 
     socket.on('stockUpdate', (data) => {
@@ -77,7 +76,6 @@ function App() {
         p._id === data.id ? { ...p, stock: data.newStock } : p
       ));
     });
-
     return () => socket.off('stockUpdate');
   }, [handleLogout]);
 
@@ -107,6 +105,34 @@ function App() {
   const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+const handleConfirmOrder = async () => {
+  const token = localStorage.getItem('token');
+  
+  try {
+    // 1. Send each item update to the backend
+    // We use Promise.all to run all updates simultaneously
+    await Promise.all(cart.map(item => 
+      axios.post(`${API_URL}/api/products/update-stock`, 
+        { 
+          id: item._id, 
+          quantity: item.quantity 
+        },
+        { headers: { 'x-auth-token': token } }
+      )
+    ));
+
+    // 2. Success Actions
+    alert("✨ Payment Confirmed! Your luxury items are on the way.");
+    setCart([]); // Clear the cart
+    setIsQRModalOpen(false); // Close the modal
+    
+  } catch (err) {
+    console.error("Order Confirmation Error:", err);
+    alert("There was an issue processing your order. Please try again.");
+  }
+};
 
   // --- RENDERING ---
 
@@ -146,21 +172,19 @@ function App() {
       )}
 
       <CartModal 
+      total={total} 
+  cartItems={cart}
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)} 
-        cartItems={cart} 
         onCheckout={() => { setIsCartOpen(false); setIsQRModalOpen(true); }} 
       />
 
       <QRModal 
-        isOpen={isQRModalOpen} 
-        onClose={() => setIsQRModalOpen(false)} 
-        onConfirm={() => { 
-          setIsQRModalOpen(false); 
-          setCart([]);
-          alert("Order Placed Successfully!"); 
-        }} 
-      />
+  isOpen={isQRModalOpen} 
+  onClose={() => setIsQRModalOpen(false)} 
+  total={cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)} 
+  onConfirm={handleConfirmOrder} 
+/>
     </div>
   );
 }
