@@ -1,58 +1,61 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import io from 'socket.io-client';
 import axios from 'axios';
+import io from 'socket.io-client';
 import ProductCard from './ProductCard';
 import CartModal from './CartModal';
 import QRModal from './QRModal';
 import LoginComponent from './LoginComponent';
 import './App.css';
 
-// Ensure this matches your Render URL
-const API_URL = "https://e-commerce-backend-pk30.onrender.com"; 
+// Ensure this URL is correct for your Render backend
+const API_URL = "https://e-commerce-backend-pk30.onrender.com";
 const socket = io(API_URL);
 
 function App() {
-  // 1. Persistent State Initialization
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-  
+  // --- 1. State ---
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')) || null);
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isInitializing, setIsInitializing] = useState(true);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // 2. Logic: Logout (Clears storage and resets app)
+  // --- 2. Derived State (Totals) ---
+  const cartTotal = cart.reduce((acc, item) => {
+    const price = Number(item.price) || 0;
+    const qty = Number(item.quantity) || 0;
+    return acc + (price * qty);
+  }, 0);
+
+  // --- 3. Authentication Logic ---
   const handleLogout = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
-    setProducts([]);
     setCart([]);
+    setProducts([]);
   }, []);
 
-  // 3. Logic: Fetch Products (With Multi-Header Support)
+  const handleLoginData = (data) => {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    setUser(data.user);
+  };
+
+  // --- 4. API Calls ---
   const fetchProducts = useCallback(async () => {
     const token = localStorage.getItem('token');
-    
-    // Stop if no token or no user state yet
     if (!token || !user) return;
 
     try {
       setLoading(true);
       const res = await axios.get(`${API_URL}/api/products`, {
-        headers: { 
-          'x-auth-token': token,        }
+        headers: { 'x-auth-token': token }
       });
       setProducts(res.data);
     } catch (err) {
-      console.error("Fetch Error:", err.response?.status);
-      
-      // ONLY kick to login if it's a confirmed Auth error
+      console.error("Fetch Products Error:", err);
       if (err.response?.status === 401) {
         handleLogout();
       }
@@ -61,83 +64,82 @@ function App() {
     }
   }, [user, handleLogout]);
 
-  // 4. Effect: Initial Load & Socket Setup
-  useEffect(() => {
+  // NEW: Handle Order Confirmation & Stock Reduction
+  const handleConfirmOrder = async () => {
     const token = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
-    
-    if (token && savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setIsInitializing(false);
+    if (!token) return;
 
+    try {
+      // Send stock updates for all items in the cart
+      await Promise.all(cart.map(item => 
+        axios.post(`${API_URL}/api/products/update-stock`, 
+          { 
+            id: item._id, 
+            quantity: item.quantity 
+          },
+          { headers: { 'x-auth-token': token } }
+        )
+      ));
+
+      alert("✨ Payment Confirmed! Your items are on the way.");
+      setCart([]); // Clear cart locally
+      setIsQRModalOpen(false); // Close the QR Modal
+    } catch (err) {
+      console.error("Order Error:", err);
+      alert(err.response?.data?.message || "Order processing failed. Please try again.");
+    }
+  };
+
+  // --- 5. Side Effects ---
+  useEffect(() => {
+    if (user) {
+      fetchProducts();
+    }
+
+    // Real-time listener for stock changes
     socket.on('stockUpdate', (data) => {
       setProducts(prev => prev.map(p => 
         p._id === data.id ? { ...p, stock: data.newStock } : p
       ));
     });
+
     return () => socket.off('stockUpdate');
-  }, [handleLogout]);
+  }, [user, fetchProducts]);
 
-  // 5. Effect: Fetch products when user is ready
-  useEffect(() => {
-    if (user && !isInitializing) {
-      fetchProducts();
-    }
-  }, [user, isInitializing, fetchProducts]);
-
-  // 6. Logic: Login Handler (Instant Swap)
-  const handleLoginData = (data) => {
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    setUser(data.user); // Triggers immediate view change
+  // --- 6. Helper Functions ---
+  const addToCart = (product) => {
+    if (product.stock <= 0) return alert("Item out of stock!");
+    
+    setCart(prev => {
+      const existing = prev.find(item => item._id === product._id);
+      if (existing) {
+        return prev.map(item => 
+          item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
   };
 
-  const addToCart = (p) => {
-    if (p.stock <= 0) return alert("Out of Stock");
-    setCart(prev => {
-      const exist = prev.find(item => item._id === p._id);
-      if (exist) return prev.map(item => item._id === p._id ? { ...item, quantity: item.quantity + 1 } : item);
-      return [...prev, { ...p, quantity: 1 }];
-    });
+  const removeFromCart = (id) => {
+    setCart(prev => prev.filter(item => item._id !== id));
+  };
+
+  const updateQuantity = (id, delta) => {
+    setCart(prev => prev.map(item => {
+      if (item._id === id) {
+        const newQty = Math.max(1, item.quantity + delta);
+        return { ...item, quantity: newQty };
+      }
+      return item;
+    }));
   };
 
   const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
-const handleConfirmOrder = async () => {
-  const token = localStorage.getItem('token');
-  
-  try {
-    // 1. Send each item update to the backend
-    // We use Promise.all to run all updates simultaneously
-    await Promise.all(cart.map(item => 
-      axios.post(`${API_URL}/api/products/update-stock`, 
-        { 
-          id: item._id, 
-          quantity: item.quantity 
-        },
-        { headers: { 'x-auth-token': token } }
-      )
-    ));
-
-    // 2. Success Actions
-    alert("✨ Payment Confirmed! Your luxury items are on the way.");
-    setCart([]); // Clear the cart
-    setIsQRModalOpen(false); // Close the modal
-    
-  } catch (err) {
-    console.error("Order Confirmation Error:", err);
-    alert("There was an issue processing your order. Please try again.");
-  }
-};
-
-  // --- RENDERING ---
-
-  if (isInitializing) return <div className="loader">Authenticating...</div>;
-
+  // --- 7. Conditional Rendering ---
   if (!user) {
     return <LoginComponent onLogin={handleLoginData} API_URL={API_URL} />;
   }
@@ -146,45 +148,55 @@ const handleConfirmOrder = async () => {
     <div className="container">
       <nav className="navbar">
         <h1 className="logo">LUXE STORE</h1>
-        <input 
-          type="text" 
-          placeholder="Search items..." 
-          className="search-input"
-          onChange={(e) => setSearchQuery(e.target.value)} 
-        />
-        <div className="nav-actions">
-          <span>{user.name}</span>
-          <button onClick={handleLogout} className="btn-logout">Logout</button>
-          <div className="cart-icon" onClick={() => setIsCartOpen(true)}>
-            🛒 ({cart.reduce((s, i) => s + i.quantity, 0)})
+        <div className="nav-right">
+          <input 
+            type="text" 
+            placeholder="Search luxury..." 
+            className="search-bar"
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <div className="cart-trigger" onClick={() => setIsCartOpen(true)}>
+            🛒 <span className="cart-count">{cart.reduce((s, i) => s + i.quantity, 0)}</span>
           </div>
+          <button onClick={handleLogout} className="logout-btn">Logout</button>
         </div>
       </nav>
 
       {loading ? (
-        <div className="loader">Opening Vault...</div>
+        <div className="loader">Opening the vault...</div>
       ) : (
         <main className="product-grid">
           {filteredProducts.map(p => (
-            <ProductCard key={p._id} product={p} onAddToCart={() => addToCart(p)} />
+            <ProductCard 
+              key={p._id} 
+              product={p} 
+              onAddToCart={() => addToCart(p)} 
+            />
           ))}
         </main>
       )}
 
+      {/* MODALS */}
       <CartModal 
-      total={total} 
-  cartItems={cart}
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)} 
-        onCheckout={() => { setIsCartOpen(false); setIsQRModalOpen(true); }} 
+        cartItems={cart} 
+        total={cartTotal}
+        onIncrease={(item) => addToCart(item)}
+        onDecrease={(id) => updateQuantity(id, -1)}
+        clearCart={() => setCart([])}
+        onCheckout={() => {
+          setIsCartOpen(false);
+          setIsQRModalOpen(true);
+        }}
       />
 
       <QRModal 
-  isOpen={isQRModalOpen} 
-  onClose={() => setIsQRModalOpen(false)} 
-  total={cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)} 
-  onConfirm={handleConfirmOrder} 
-/>
+        isOpen={isQRModalOpen} 
+        onClose={() => setIsQRModalOpen(false)} 
+        total={cartTotal} 
+        onConfirm={handleConfirmOrder} 
+      />
     </div>
   );
 }
