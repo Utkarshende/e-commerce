@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import './AddedToCartToast.css';
+import '../../styles/AddedToCartToast.css';
 
 const AddedToCartToast = ({ itemName, show, onClose }) => {
   useEffect(() => {
