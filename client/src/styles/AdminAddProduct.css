@@ -1,0 +1,50 @@
+    .admin-form-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 40px;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.admin-form-container h3 {
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+}
+
+.luxe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.luxe-form input, .luxe-form textarea, .luxe-form select {
+  padding: 12px;
+  border: 1px solid #eee;
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.luxe-form input:focus {
+  border-color: #d4af37;
+}
+
+.admin-submit-btn {
+  background: #1a1a1a;
+  color: white;
+  padding: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.admin-submit-btn:hover {
+  background: #d4af37;
+}a

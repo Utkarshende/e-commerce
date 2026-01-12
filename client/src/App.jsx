@@ -105,7 +105,9 @@ function App() {
   };
 
   if (!user) return <LoginComponent onLogin={(d) => { localStorage.setItem('token', d.token); localStorage.setItem('user', JSON.stringify(d.user)); setUser(d.user); }} API_URL={API_URL} />;
-
+{user?.isAdmin && (
+  <AdminAddProduct API_URL={API_URL} onProductAdded={fetchProducts} />
+)}
   // --- Final Filter Logic ---
   const categories = ['All', 'Signature', 'Essentials', 'Limited'];
   const filteredProducts = products.filter(p => {
