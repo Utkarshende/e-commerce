@@ -62,3 +62,9 @@
   background: #d4af37;
   transform: translateY(-2px);
 }
+.admin-form-container img {
+  max-width: 100px;
+  height: auto;
+  margin: 10px 0;
+  border-radius: 4px;
+}

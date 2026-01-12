@@ -1,202 +1,75 @@
-/* 1. Main Card Container */
 .product-card {
   background: #ffffff;
-  border: 1px solid #f0f0f0;
-  border-radius: 4px; /* Slight radius for a modern but sharp luxury look */
-  position: relative;
-  overflow: hidden;
-  height: 450px; /* Controlled height to prevent long scrolling */
+  border: 1px solid #f2f2f2;
+  height: 400px; /* Even more compact height */
   display: flex;
   flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  animation: luxeFadeUp 0.8s cubic-bezier(0.2, 1, 0.3, 1) both;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.product-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-  border-color: #d4af37;
-}
-
-/* 2. Image Section */
 .product-image-container {
   width: 100%;
-  height: 280px; /* Reduced image height */
+  height: 240px; /* Reduced for less scrolling */
   overflow: hidden;
   background: #f9f9f9;
   position: relative;
 }
 
-.product-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s ease;
-}
-
-.product-card:hover .product-card-img {
-  transform: scale(1.08);
-}
-
-/* 3. Info Section */
 .product-info {
-  padding: 15px 20px;
+  padding: 12px 15px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  align-items: center; /* Center text for luxury feel */
   text-align: center;
 }
 
-.product-category {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #d4af37; /* Gold category text */
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
 .product-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 5px;
-  letter-spacing: 0.5px;
-  line-height: 1.2;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
 }
 
 .product-price {
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #333;
-  margin-top: 5px;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 8px;
 }
 
-/* 4. Details Row (Stock) */
+/* Luxury Stock Indicator */
 .product-details-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 8px;
+  margin-bottom: 10px;
 }
 
 .product-stock {
-  font-size: 0.75rem;
-  color: #888;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #999;
+  padding: 2px 8px;
+  border: 1px solid #eee;
+  border-radius: 12px;
 }
 
 .stock-low {
-  color: #d9534f;
-  font-weight: bold;
+  color: #b22222;
+  border-color: #ffdada;
+  background: #fff5f5;
+  font-weight: 600;
 }
 
-/* 5. Buttons */
 .add-to-cart-btn {
   width: 100%;
-  margin-top: auto; /* Pushes button to the bottom of info section */
   padding: 12px;
   background: #1a1a1a;
-  color: white;
+  color: #fff;
   border: none;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.7rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.add-to-cart-btn:hover {
-  background: #d4af37;
-}
-
-.add-to-cart-btn:disabled, .sold-out {
-  background: #ccc !important;
-  cursor: not-allowed !important;
-}
-
-/* 6. Admin Controls */
-.admin-delete-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.9);
-  color: #ff4d4d;
-  border: 1px solid #ff4d4d;
-  padding: 4px 10px;
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.admin-delete-badge:hover {
-  background: #ff4d4d;
-  color: white;
-}
-
-/* 7. Animations */
-@keyframes luxeFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Staggered Delay for Grid Reveal */
-.product-card:nth-child(1) { animation-delay: 0.05s; }
-.product-card:nth-child(2) { animation-delay: 0.1s; }
-.product-card:nth-child(3) { animation-delay: 0.15s; }
-.product-card:nth-child(4) { animation-delay: 0.2s; }
-.product-card:nth-child(5) { animation-delay: 0.25s; }
-.product-card:nth-child(6) { animation-delay: 0.3s; }
-
-/* ... Keep the rest of your ProductCard.css as we corrected before ... */
-
-.product-image-container {
-  width: 100%;
-  height: 280px;
-  overflow: hidden;
-  background: #f9f9f9;
-  position: relative; /* Required for absolute positioning of secondary image */
-}
-
-.product-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.6s ease, transform 1.2s cubic-bezier(0, 0, 0.2, 1);
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* Primary is visible by default */
-.product-card-img.primary {
-  z-index: 2;
-  opacity: 1;
-}
-
-/* Secondary is hidden by default */
-.product-card-img.secondary {
-  z-index: 1;
-  opacity: 0;
-  transform: scale(1.1); /* Slightly zoomed for a "reveal" effect */
-}
-
-/* Hover States */
-.product-card:hover .product-card-img.primary {
-  opacity: 0;
-}
-
-.product-card:hover .product-card-img.secondary {
-  opacity: 1;
-  transform: scale(1); /* Zooms out slightly into focus */
+  margin-top: auto; /* Sticks to bottom of card */
 }

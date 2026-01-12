@@ -1,7 +1,5 @@
 import React from 'react';
-import '<div styleName={} />
-<div styleName={} />
-<styles></styles>/ProductCard.css';
+import '../../styles/ProductCard.css';
 
 const ProductCard = ({ product, onAddToCart, isAdmin, onDelete }) => {
   return (
@@ -30,10 +28,14 @@ const ProductCard = ({ product, onAddToCart, isAdmin, onDelete }) => {
         <p className="product-price">${product.price}</p>
         
         <div className="product-details-row">
-          <span className={`product-stock ${product.stock < 5 ? 'stock-low' : ''}`}>
-            {product.stock > 0 ? `${product.stock} in stock` : 'Out of Stock'}
-          </span>
-        </div>
+  {product.stock > 0 ? (
+    <span className={`product-stock ${product.stock <= 3 ? 'stock-low' : ''}`}>
+      {product.stock <= 3 ? `Only ${product.stock} Remaining` : `In Stock: ${product.stock}`}
+    </span>
+  ) : (
+    <span className="product-stock sold-out-text">Currently Unavailable</span>
+  )}
+</div>a
 
         <button 
           className="add-to-cart-btn" 
