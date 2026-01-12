@@ -41,8 +41,8 @@ io.on('connection', (socket) => {
 });
 
 // 5. Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/products', require('./routes/product'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/products', require('./routes/productRoutes'));
 
 // Root Route for Health Check
 app.get('/', (req, res) => {

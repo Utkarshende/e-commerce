@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/authMiddleware');
 
 // --- 1. GET ALL PRODUCTS ---
 router.get('/', async (req, res) => {
