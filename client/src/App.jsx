@@ -89,14 +89,26 @@ function App() {
     } catch (err) { alert("Failed to delete product."); }
   };
 
-  const addToCart = (product) => {
-    if (product.stock <= 0) return;
-    setCart(prev => {
-      const existing = prev.find(item => item._id === product._id);
-      if (existing) return prev.map(item => item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item);
-      return [...prev, { ...product, quantity: 1 }];
-    });
-  };
+const addToCart = (product) => {
+  setCart(prevCart => {
+    const isItemInCart = prevCart.find(item => item._id === product._id);
+
+    if (isItemInCart) {
+      // If exists, increase quantity
+      return prevCart.map(item =>
+        item._id === product._id 
+          ? { ...item, quantity: item.quantity + 1 } 
+          : item
+      );
+    }
+    // If new, add to array with quantity 1
+    return [...prevCart, { ...product, quantity: 1 }];
+  });
+  
+  // Luxury Toast Logic
+  setLastAddedItem(product.name);
+  setShowToast(true);
+};
 
   const cartTotal = cart.reduce((acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1), 0);
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -159,8 +171,15 @@ const handleConfirmPayment = async () => {
 
       <Footer />
       <BackToTop />
-      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cart} total={cartTotal} onIncrease={addToCart} onDecrease={(id) => setCart(prev => prev.map(item => item._id === id ? { ...item, quantity: item.quantity - 1 } : item).filter(i => i.quantity > 0))} clearCart={() => setCart([])} onCheckout={() => { setIsCartOpen(false); setIsQRModalOpen(true); }} />
-<QRModal 
+<CartModal 
+  isOpen={isCartOpen} 
+  onClose={() => setIsCartOpen(false)} 
+  cartItems={cart}        // <--- CRITICAL: Must match your [cart] state
+  total={cartTotal} 
+  onIncrease={addToCart} 
+  onDecrease={handleDecrease} 
+  onCheckout={handleCheckout} 
+/><QRModal 
   isOpen={isQRModalOpen} 
   onClose={() => setIsQRModalOpen(false)} 
   total={cartTotal} 

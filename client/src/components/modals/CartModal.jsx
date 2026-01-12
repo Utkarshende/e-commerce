@@ -14,27 +14,28 @@ const CartModal = ({ isOpen, onClose, cartItems, total, onIncrease, onDecrease, 
 </div>
 
         {/* Scrollable Area */}
-        <div className="cart-items">
-          {cartItems.length === 0 ? (
-            <p className="empty-msg">Your bag is empty.</p>
-          ) : (
-            cartItems.map((item) => (
-              <div key={item._id} className="cart-item">
-                <img src={item.image} alt={item.name} className="cart-img" />
-                <div className="item-info">
-                  <h4>{item.name}</h4>
-                  <p>${item.price}</p>
-                  <div className="qty-box">
-                    <button onClick={() => onDecrease(item._id)}>-</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => onIncrease(item)}>+</button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
+  <div className="cart-items">
+  {cartItems.length === 0 ? (
+    <div className="empty-cart-state">
+      <p>YOUR SELECTION IS EMPTY</p>
+    </div>
+  ) : (
+    cartItems.map((item) => (
+      <div key={item._id} className="cart-item"> {/* Ensure item._id exists */}
+        <img src={item.image} alt={item.name} className="cart-item-img" />
+        <div className="cart-item-info">
+          <h4>{item.name}</h4>
+          <p className="cart-item-price">${item.price}</p>
+          <div className="cart-qty-controls">
+            <button onClick={() => onDecrease(item._id)}>−</button>
+            <span>{item.quantity}</span>
+            <button onClick={() => onIncrease(item)}>+</button>
+          </div>
         </div>
-
+      </div>
+    ))
+  )}
+</div>a
         {/* Fixed Bottom Area */}
         {cartItems.length > 0 && (
           <div className="cart-footer">
