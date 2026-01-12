@@ -109,6 +109,31 @@ function App() {
     return matchesSearch && matchesCategory;
   });
 
+  // Add this function inside your App component before the return
+const handleConfirmPayment = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    // 1. Update stock for all items in cart
+    await Promise.all(cart.map(item => 
+      axios.post(`${API_URL}/api/products/update-stock`, { 
+        id: item._id, 
+        quantity: item.quantity 
+      }, { headers: { 'x-auth-token': token } })
+    ));
+
+    // 2. Clear Local State
+    setCart([]);
+    setIsQRModalOpen(false);
+    
+    // 3. Success Feedback
+    alert("Transaction Confirmed. Your masterpiece is being prepared.");
+  } catch (err) {
+    console.error("Payment Error:", err);
+    alert("Payment processing failed. Please check your connection.");
+  }
+}
+
+
   return (
     <div className="app-wrapper">
       {user && <WelcomeToast userName={user.name} />}
@@ -135,8 +160,12 @@ function App() {
       <Footer />
       <BackToTop />
       <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cart} total={cartTotal} onIncrease={addToCart} onDecrease={(id) => setCart(prev => prev.map(item => item._id === id ? { ...item, quantity: item.quantity - 1 } : item).filter(i => i.quantity > 0))} clearCart={() => setCart([])} onCheckout={() => { setIsCartOpen(false); setIsQRModalOpen(true); }} />
-      <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} total={cartTotal} onConfirm={async () => { /* reuse handleConfirmOrder logic */ }} />
-    </div>
+<QRModal 
+  isOpen={isQRModalOpen} 
+  onClose={() => setIsQRModalOpen(false)} 
+  total={cartTotal} 
+  onConfirm={handleConfirmPayment} // <-- Ensure this is linked!
+/>    </div>
   );
 }
 

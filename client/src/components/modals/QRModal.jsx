@@ -34,6 +34,9 @@ const QRModal = ({ isOpen, onClose, total = 0, onConfirm }) => {
         <div className="modal-footer">
           <button className="confirm-btn" onClick={onConfirm}>Confirm Payment</button>
           <button className="cancel-btn" onClick={onClose}>Cancel</button>
+          <button className="confirm-btn" onClick={onConfirm}>
+  I HAVE PAID
+</button>
         </div>
       </div>
     </div>
