@@ -1,78 +1,89 @@
+/* 1. Main Card Container */
 .product-card {
   background: #ffffff;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   border: 1px solid #f0f0f0;
+  border-radius: 4px; /* Slight radius for a modern but sharp luxury look */
+  position: relative;
+  overflow: hidden;
+  height: 450px; /* Controlled height to prevent long scrolling */
   display: flex;
   flex-direction: column;
-  position: relative;
-    animation: luxeFadeUp 0.8s cubic-bezier(0.2, 1, 0.3, 1) both;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: luxeFadeUp 0.8s cubic-bezier(0.2, 1, 0.3, 1) both;
 }
 
 .product-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-  border-color: #d4af37; /* Luxury gold accent on hover */
+  border-color: #d4af37;
 }
 
+/* 2. Image Section */
 .product-image-container {
   width: 100%;
-  height: 250px;
+  height: 280px; /* Reduced image height */
   overflow: hidden;
   background: #f9f9f9;
+  position: relative;
 }
 
 .product-card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.8s ease;
 }
 
 .product-card:hover .product-card-img {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
+/* 3. Info Section */
 .product-info {
-  padding: 20px;
+  padding: 15px 20px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  text-align: center;
 }
 
 .product-category {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #888;
+  letter-spacing: 2px;
+  color: #d4af37; /* Gold category text */
   margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .product-name {
-  font-size: 1.1rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #222;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.product-details-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
 }
 
 .product-price {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 400;
   color: #333;
+  margin-top: 5px;
+}
+
+/* 4. Details Row (Stock) */
+.product-details-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
 }
 
 .product-stock {
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 0.75rem;
+  color: #888;
 }
 
 .stock-low {
@@ -80,149 +91,42 @@
   font-weight: bold;
 }
 
+/* 5. Buttons */
 .add-to-cart-btn {
   width: 100%;
-  margin-top: 15px;
+  margin-top: auto; /* Pushes button to the bottom of info section */
   padding: 12px;
-  background: #222;
+  background: #1a1a1a;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.add-to-cart-btn:hover {
-  background: #d4af37; /* Gold button on hover */
-}
-
-.add-to-cart-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}.product-card {
-  background: #ffffff;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border: 1px solid #f0f0f0;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.product-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-  border-color: #d4af37; /* Luxury gold accent on hover */
-}
-
-.product-image-container {
-  width: 100%;
-  height: 250px;
-  overflow: hidden;
-  background: #f9f9f9;
-}
-
-.product-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.product-card:hover .product-card-img {
-  transform: scale(1.1);
-}
-
-.product-info {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.product-category {
   font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #888;
-  margin-bottom: 8px;
-}
-
-.product-name {
-  font-size: 1.1rem;
   font-weight: 600;
-  color: #222;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.product-details-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-}
-
-.product-price {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #333;
-}
-
-.product-stock {
-  font-size: 0.85rem;
-  color: #666;
-}
-
-.stock-low {
-  color: #d9534f;
-  font-weight: bold;
-}
-
-.add-to-cart-btn {
-  width: 100%;
-  margin-top: 15px;
-  padding: 12px;
-  background: #222;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .add-to-cart-btn:hover {
-  background: #d4af37; /* Gold button on hover */
+  background: #d4af37;
 }
 
-.add-to-cart-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
+.add-to-cart-btn:disabled, .sold-out {
+  background: #ccc !important;
+  cursor: not-allowed !important;
 }
-/* Animation for the card reveal */
-@keyframes luxeFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+
+/* 6. Admin Controls */
 .admin-delete-badge {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 10px;
+  right: 10px;
   z-index: 10;
   background: rgba(255, 255, 255, 0.9);
   color: #ff4d4d;
   border: 1px solid #ff4d4d;
-  padding: 5px 12px;
-  font-size: 0.6rem;
+  padding: 4px 10px;
+  font-size: 0.55rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
@@ -234,14 +138,22 @@
   color: white;
 }
 
-.sold-out {
-  background: #ccc !important;
-  cursor: not-allowed !important;
+/* 7. Animations */
+@keyframes luxeFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-/* Staggered delay for a premium feel (first 6 items) */
-.product-card:nth-child(1) { animation-delay: 0.1s; }
-.product-card:nth-child(2) { animation-delay: 0.2s; }
-.product-card:nth-child(3) { animation-delay: 0.3s; }
-.product-card:nth-child(4) { animation-delay: 0.4s; }
-.product-card:nth-child(5) { animation-delay: 0.5s; }
-.product-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Staggered Delay for Grid Reveal */
+.product-card:nth-child(1) { animation-delay: 0.05s; }
+.product-card:nth-child(2) { animation-delay: 0.1s; }
+.product-card:nth-child(3) { animation-delay: 0.15s; }
+.product-card:nth-child(4) { animation-delay: 0.2s; }
+.product-card:nth-child(5) { animation-delay: 0.25s; }
+.product-card:nth-child(6) { animation-delay: 0.3s; }
