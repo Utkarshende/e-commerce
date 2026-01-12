@@ -11,7 +11,6 @@ const API_URL = "https://e-commerce-backend-pk30.onrender.com";
 const socket = io(API_URL);
 
 function App() {
-  // 1. Initial States
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
@@ -23,19 +22,18 @@ function App() {
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // 2. Define Logout FIRST (To avoid "Initialization" errors)
   const handleLogout = useCallback(() => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.clear();
     setUser(null);
     setProducts([]);
     setCart([]);
   }, []);
 
-  // 3. Define Fetch Products
   const fetchProducts = useCallback(async () => {
     const token = localStorage.getItem('token');
-    if (!token) return; 
+    
+    // CRITICAL FIX: If token is missing, do not attempt the call
+    if (!token || !user) return; 
 
     try {
       setLoading(true);
@@ -50,10 +48,10 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, [handleLogout]);
+  }, [user, handleLogout]);
 
-  // 4. Effects (These run AFTER the functions above are defined)
   useEffect(() => {
+    // Only fetch if we actually have a user session
     if (user) {
       fetchProducts();
     }
@@ -67,27 +65,17 @@ function App() {
     return () => socket.off('stockUpdate');
   }, [user, fetchProducts]);
 
-  // 5. Action Handlers
   const handleLoginData = (data) => {
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
-    setUser(data.user); // Instant transition
-  };
-
-  const addToCart = (p) => {
-    if (p.stock <= 0) return alert("Out of stock");
-    setCart(prev => {
-      const exist = prev.find(item => item._id === p._id);
-      if (exist) return prev.map(item => item._id === p._id ? { ...item, quantity: item.quantity + 1 } : item);
-      return [...prev, { ...p, quantity: 1 }];
-    });
+    // Instant switch
+    setUser(data.user); 
   };
 
   const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // 6. View Logic
   if (!user) {
     return <LoginComponent onLogin={handleLoginData} API_URL={API_URL} />;
   }
@@ -95,44 +83,27 @@ function App() {
   return (
     <div className="container">
       <nav className="navbar">
-        <h1 className="logo">LUXE</h1>
-        <input 
-          type="text" 
-          placeholder="Search collections..." 
-          className="search-input"
-          onChange={(e) => setSearchQuery(e.target.value)} 
-        />
-        <div className="nav-actions">
+        <h1 className="logo">LUXE STORE</h1>
+        <div className="nav-right">
           <span>{user.name}</span>
-          <button onClick={handleLogout} className="btn-logout">Logout</button>
-          <div className="cart-icon" onClick={() => setIsCartOpen(true)}>
-            🛒 <span className="badge">{cart.reduce((s, i) => s + i.quantity, 0)}</span>
+          <button onClick={handleLogout} className="logout-btn">Logout</button>
+          <div className="cart-btn" onClick={() => setIsCartOpen(true)}>
+            🛒 {cart.length}
           </div>
         </div>
       </nav>
 
       {loading ? (
-        <div className="loader">Updating Inventory...</div>
+        <div className="status">Loading Collections...</div>
       ) : (
         <div className="product-grid">
           {filteredProducts.map(p => (
-            <ProductCard key={p._id} product={p} onAddToCart={() => addToCart(p)} />
+            <ProductCard key={p._id} product={p} onAddToCart={() => {}} />
           ))}
         </div>
       )}
 
-      <CartModal 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
-        cartItems={cart} 
-        onCheckout={() => { setIsCartOpen(false); setIsQRModalOpen(true); }} 
-      />
-
-      <QRModal 
-        isOpen={isQRModalOpen} 
-        onClose={() => setIsQRModalOpen(false)} 
-        onConfirm={() => { setIsQRModalOpen(false); alert("Order Placed!"); }} 
-      />
+      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cart} />
     </div>
   );
 }
