@@ -1,14 +1,23 @@
-/* Sticky Glassmorphism Effect */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap');
+
 .luxe-navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3); /* Subtle Gold Border */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-  transition: all 0.4s ease;
+  padding: 1.5rem 0;
+  background: #ffffff;
+  border-bottom: 1px solid transparent;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* State when user scrolls down */
+.navbar-scrolled {
+  padding: 0.8rem 0;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .nav-container {
@@ -17,113 +26,87 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.2rem 40px;
+  padding: 0 40px;
 }
 
-/* Brand Logo Styling */
 .nav-brand {
-  font-family: 'Playfair Display', serif; /* Suggest importing this font */
+  font-family: 'Playfair Display', serif;
   font-weight: 900;
   font-size: 1.8rem;
   letter-spacing: 4px;
   color: #1a1a1a;
-  cursor: pointer;
+  transition: transform 0.4s ease;
 }
 
-.nav-brand span {
-  font-weight: 300;
-  color: #d4af37; /* The Signature Gold */
-}
+.nav-brand span { font-weight: 300; color: #d4af37; }
 
-/* Refined Search Bar */
-.nav-search {
-  flex: 0 1 400px;
-  margin: 0 3rem;
-}
+.navbar-scrolled .nav-brand { transform: scale(0.9); }
+
+.nav-search { flex: 0 1 400px; margin: 0 2rem; }
 
 .nav-search input {
   width: 100%;
-  padding: 10px 20px;
-  background: #fcfcfc;
-  border: 1px solid #e0e0e0;
+  padding: 10px 25px;
+  background: #f8f8f8;
+  border: 1px solid #eee;
   border-radius: 30px;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
   outline: none;
+  transition: 0.3s;
 }
 
-.nav-search input:focus {
-  border-color: #d4af37;
-  background: #fff;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
-}
+.nav-search input:focus { border-color: #d4af37; background: #fff; }
 
-/* Elegant Tools Section */
 .nav-tools {
   display: flex;
   align-items: center;
-  gap: 3rem; /* Generous spacing for a "rich" feel */
+  gap: 2.5rem;
 }
 
 .user-welcome {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 600;
-  color: #555;
+  color: #666;
 }
 
-/* The Cart/Bag Trigger */
 .cart-trigger {
   display: flex;
   align-items: center;
-  position: relative;
+  gap: 8px;
   cursor: pointer;
-  transition: transform 0.2s ease;
 }
 
-.cart-trigger:hover {
-  transform: scale(1.05);
-}
+.cart-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-.bag-icon {
-  font-size: 1.6rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-}
+.bag-icon { font-size: 1.5rem; }
 
 .badge {
   position: absolute;
-  top: -5px;
+  top: -8px;
   right: -10px;
   background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
   color: white;
   font-size: 0.65rem;
-  min-width: 20px;
+  width: 20px;
   height: 20px;
-  padding: 0 5px;
-  border-radius: 10px;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 2px solid white;
 }
 
-/* Luxury Logout Button */
 .nav-logout {
-  padding: 8px 24px;
+  padding: 8px 20px;
   background: transparent;
   border: 1px solid #1a1a1a;
-  color: #1a1a1a;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 0; /* Sharp corners for luxury feel */
+  transition: 0.3s;
 }
 
-.nav-logout:hover {
-  background: #1a1a1a;
-  color: #fff;
-}
+.nav-logout:hover { background: #1a1a1a; color: #fff; }

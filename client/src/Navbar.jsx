@@ -1,9 +1,9 @@
 import React from 'react';
 import './Navbar.css';
 
-const Navbar = ({ cartCount, onCartClick, onLogout, user, onSearch }) => {
+const Navbar = ({ scrolled, cartCount, onCartClick, onLogout, user, onSearch }) => {
   return (
-    <nav className="luxe-navbar">
+    <nav className={`luxe-navbar ${scrolled ? 'navbar-scrolled' : ''}`}>
       <div className="nav-container">
         <div className="nav-brand">LUXE<span>STORE</span></div>
         
