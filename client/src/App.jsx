@@ -7,22 +7,26 @@ import QRModal from './QRModal';
 import LoginComponent from './LoginComponent';
 import './App.css';
 
-// Replace with your actual Render backend URL
+// Ensure this matches your Render URL
 const API_URL = "https://e-commerce-backend-pk30.onrender.com"; 
 const socket = io(API_URL);
 
 function App() {
-  // 1. Initialize states
-  const [user, setUser] = useState(null);
+  // 1. Persistent State Initialization
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isInitializing, setIsInitializing] = useState(true); // Prevents the login kickback
+  const [isInitializing, setIsInitializing] = useState(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // 2. Define Logout (Clears storage and resets state)
+  // 2. Logic: Logout (Clears storage and resets app)
   const handleLogout = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -31,46 +35,45 @@ function App() {
     setCart([]);
   }, []);
 
-  // 3. Define Fetch Products
+  // 3. Logic: Fetch Products (With Multi-Header Support)
   const fetchProducts = useCallback(async () => {
     const token = localStorage.getItem('token');
-    if (!token) return;
+    
+    // Stop if no token or no user state yet
+    if (!token || !user) return;
 
     try {
       setLoading(true);
       const res = await axios.get(`${API_URL}/api/products`, {
-        headers: { 'x-auth-token': token }
+        headers: { 
+          'x-auth-token': token,
+          'Authorization': `Bearer ${token}` 
+        }
       });
       setProducts(res.data);
     } catch (err) {
-      // Only logout if the error is actually a 401 Unauthorized
+      console.error("Fetch Error:", err.response?.status);
+      
+      // ONLY kick to login if it's a confirmed Auth error
       if (err.response?.status === 401) {
         handleLogout();
       }
     } finally {
       setLoading(false);
     }
-  }, [handleLogout]);
+  }, [user, handleLogout]);
 
-  // 4. Initial Auth Check (Runs once when app starts)
+  // 4. Effect: Initial Load & Socket Setup
   useEffect(() => {
-    const checkAuth = () => {
-      const savedUser = localStorage.getItem('user');
-      const token = localStorage.getItem('token');
-      
-      if (savedUser && token) {
-        try {
-          setUser(JSON.parse(savedUser));
-        } catch (e) {
-          handleLogout();
-        }
-      }
-      setIsInitializing(false); // Auth check complete
-    };
+    const token = localStorage.getItem('token');
+    const savedUser = localStorage.getItem('user');
+    
+    if (token && savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+    
+    setIsInitializing(false);
 
-    checkAuth();
-
-    // Socket listeners
     socket.on('stockUpdate', (data) => {
       setProducts(prev => prev.map(p => 
         p._id === data.id ? { ...p, stock: data.newStock } : p
@@ -80,22 +83,22 @@ function App() {
     return () => socket.off('stockUpdate');
   }, [handleLogout]);
 
-  // 5. Fetch products whenever user changes
+  // 5. Effect: Fetch products when user is ready
   useEffect(() => {
     if (user && !isInitializing) {
       fetchProducts();
     }
   }, [user, isInitializing, fetchProducts]);
 
-  // 6. Login Handler (Used by LoginComponent)
+  // 6. Logic: Login Handler (Instant Swap)
   const handleLoginData = (data) => {
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
-    setUser(data.user); // Triggers re-render to show the store
+    setUser(data.user); // Triggers immediate view change
   };
 
   const addToCart = (p) => {
-    if (p.stock <= 0) return alert("Out of stock!");
+    if (p.stock <= 0) return alert("Out of Stock");
     setCart(prev => {
       const exist = prev.find(item => item._id === p._id);
       if (exist) return prev.map(item => item._id === p._id ? { ...item, quantity: item.quantity + 1 } : item);
@@ -107,14 +110,10 @@ function App() {
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // --- Rendering Logic ---
+  // --- RENDERING ---
 
-  // Stop everything while checking for an existing session
-  if (isInitializing) {
-    return <div className="loader">Authenticating...</div>;
-  }
+  if (isInitializing) return <div className="loader">Authenticating...</div>;
 
-  // Gatekeeper: If no user, show login. If user, show store.
   if (!user) {
     return <LoginComponent onLogin={handleLoginData} API_URL={API_URL} />;
   }
@@ -130,16 +129,16 @@ function App() {
           onChange={(e) => setSearchQuery(e.target.value)} 
         />
         <div className="nav-actions">
-          <span>Welcome, {user.name}</span>
+          <span>{user.name}</span>
           <button onClick={handleLogout} className="btn-logout">Logout</button>
           <div className="cart-icon" onClick={() => setIsCartOpen(true)}>
-            🛒 <span className="badge">{cart.reduce((s, i) => s + i.quantity, 0)}</span>
+            🛒 ({cart.reduce((s, i) => s + i.quantity, 0)})
           </div>
         </div>
       </nav>
 
       {loading ? (
-        <div className="loader">Syncing Inventory...</div>
+        <div className="loader">Opening Vault...</div>
       ) : (
         <main className="product-grid">
           {filteredProducts.map(p => (
@@ -158,7 +157,11 @@ function App() {
       <QRModal 
         isOpen={isQRModalOpen} 
         onClose={() => setIsQRModalOpen(false)} 
-        onConfirm={() => { setIsQRModalOpen(false); alert("Success!"); }} 
+        onConfirm={() => { 
+          setIsQRModalOpen(false); 
+          setCart([]);
+          alert("Order Placed Successfully!"); 
+        }} 
       />
     </div>
   );
