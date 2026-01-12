@@ -140,3 +140,23 @@
   min-width: 20px;
   text-align: center;
 }
+.cart-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 100px 80px;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid #fafafa;
+}
+
+.cart-img-small { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
+
+.order-summary {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #eee;
+}
+
+.summary-line { display: flex; justify-content: space-between; margin-bottom: 10px; }
+.total-line { font-size: 1.2rem; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px; }
+.free-tag { color: #28a745; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; }
