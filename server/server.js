@@ -61,6 +61,34 @@ app.use('/api/products', productRoutes(io));
 app.get('/', (req, res) => {
     res.send('Luxe Store API is running...');
 });
+// @route   POST api/products
+// @desc    Add a new product to the collection
+// @access  Private/Admin
+router.post('/', auth, async (req, res) => {
+  const { name, price, description, category, image, stock } = req.body;
+
+  try {
+    const newProduct = new Product({
+      name,
+      price,
+      description,
+      category,
+      image,
+      stock
+    });
+
+    const product = await newProduct.save();
+    
+    // Emit socket event so the frontend updates in real-time for everyone
+    const io = req.app.get('socketio');
+    io.emit('newProductAdded', product);
+
+    res.json(product);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
