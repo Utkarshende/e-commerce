@@ -1,62 +1,84 @@
-.luxe-navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 50px;
-  background: #fff;
-  transition: all 0.4s ease;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-/* 1. Search Wrapper Logic */
-.search-wrapper {
+/* Container adjustments */
+.nav-right {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  width: 180px; /* Starting width */
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 5px 0;
+  gap: 25px;
 }
 
-.search-wrapper.expanded {
-  width: 350px; /* Expanded width */
-  border-bottom-color: #d4af37;
+/* User & Logout Section */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 20px;
+  border-right: 1px solid #eee;
 }
 
-.search-input {
-  border: none;
-  outline: none;
+.user-name {
   font-size: 0.7rem;
-  letter-spacing: 2px;
-  width: 100%;
-  padding-left: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
   text-transform: uppercase;
+  color: #1a1a1a;
 }
 
-.search-icon {
-  font-size: 0.8rem;
-  opacity: 0.5;
+.logout-icon-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
 }
 
-/* 2. Fade effect for other elements when searching */
-.nav-center, .nav-right {
-  transition: opacity 0.4s ease, filter 0.4s ease;
+.logout-icon-btn:hover {
+  color: #ff4d4d; /* Subtle red for exit */
 }
 
-.search-active .nav-center, 
-.search-active .nav-right {
-  opacity: 0.3;
-  filter: blur(1px); /* Optional: adds a very high-end depth effect */
+/* Bag Button Styling */
+.bag-button {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: transform 0.2s ease;
 }
 
-/* 3. Logo Styles */
-.logo {
-  font-family: 'Playfair Display', serif;
-  letter-spacing: 6px;
-  font-size: 1.3rem;
+.bag-button:hover {
+  transform: translateY(-2px);
 }
 
-.logo span {
-  color: #d4af37;
-  font-weight: 300;
+.bag-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bag-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #d4af37; /* Gold Badge */
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+}
+
+.bag-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: #1a1a1a;
 }

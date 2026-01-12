@@ -8,7 +8,7 @@ const CartModal = ({ isOpen, onClose, cartItems, total, onIncrease, onDecrease, 
     <div className="cart-overlay" onClick={onClose}>
       <div className="cart-panel" onClick={(e) => e.stopPropagation()}>
        <div className="cart-header">
-  <div className="spacer"></div> {/* Hidden spacer for balance */}
+  <button className="invisible-spacer" disabled style={{ opacity: 0 }}>&times;</button>
   <h2>YOUR BAG</h2>
   <button className="close-btn" onClick={onClose}>&times;</button>
 </div>
