@@ -34,6 +34,9 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  // Inside your App component
+const [lastAddedItem, setLastAddedItem] = useState(null); // Fixes the second error
+const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -90,20 +93,21 @@ function App() {
   };
 
 const addToCart = (product) => {
-  setCart(prevCart => {
-    const isItemInCart = prevCart.find(item => item._id === product._id);
+  // 1. Show the luxury toast
+  setLastAddedItem(product.name); 
+  setShowToast(true);
 
-    if (isItemInCart) {
-      // If exists, increase quantity
+  // 2. Update the cart state
+  setCart(prevCart => {
+    const existing = prevCart.find(item => item._id === product._id);
+    if (existing) {
       return prevCart.map(item =>
-        item._id === product._id 
-          ? { ...item, quantity: item.quantity + 1 } 
-          : item
+        item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
       );
     }
-    // If new, add to array with quantity 1
     return [...prevCart, { ...product, quantity: 1 }];
   });
+};
   
   // Luxury Toast Logic
   setLastAddedItem(product.name);
@@ -120,6 +124,34 @@ const addToCart = (product) => {
     const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
+
+  // 1. Function to decrease quantity or remove item
+const handleDecrease = (productId) => {
+  setCart(prevCart => {
+    const existingItem = prevCart.find(item => item._id === productId);
+    
+    if (existingItem.quantity === 1) {
+      // Remove item entirely if quantity hits 0
+      return prevCart.filter(item => item._id !== productId);
+    } else {
+      // Decrease quantity by 1
+      return prevCart.map(item =>
+        item._id === productId ? { ...item, quantity: item.quantity - 1 } : item
+      );
+    }
+  });
+};
+
+// Add this function inside your App component
+const handleCheckout = () => {
+  if (cart.length === 0) {
+    alert("Your bag is empty.");
+    return;
+  }
+  setIsCartOpen(false); // Close the Bag
+  setIsQRModalOpen(true); // Open the Payment Modal
+};
+
 
   // Add this function inside your App component before the return
 const handleConfirmPayment = async () => {
@@ -183,9 +215,9 @@ const handleConfirmPayment = async () => {
   isOpen={isQRModalOpen} 
   onClose={() => setIsQRModalOpen(false)} 
   total={cartTotal} 
-  onConfirm={handleConfirmPayment} // <-- Ensure this is linked!
+  onConfirm={handleConfirmPayment} 
+  onCheckout={handleCheckout} // <-- Ensure this is linked!
 />    </div>
   );
-}
 
 export default App;
