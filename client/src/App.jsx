@@ -22,6 +22,7 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('All');
 
   // 1. Scroll Listener for Rich Navbar
   useEffect(() => {
@@ -33,7 +34,7 @@ function App() {
   // 2. Calculated Totals
   const cartTotal = cart.reduce((acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1), 0);
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-
+const categories = ['All', 'Signature', 'Essentials', 'Limited'];
   // 3. Auth Handlers
   const handleLogout = useCallback(() => {
     localStorage.clear();
@@ -90,8 +91,11 @@ function App() {
 
   if (!user) return <LoginComponent onLogin={(d) => { localStorage.setItem('token', d.token); localStorage.setItem('user', JSON.stringify(d.user)); setUser(d.user); }} API_URL={API_URL} />;
 
-  const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
-
+  const filteredProducts = products.filter(p => {
+  const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+  const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
+  return matchesSearch && matchesCategory;
+});
   return (
     <div className="app-wrapper">
       <Navbar 
@@ -102,6 +106,17 @@ function App() {
         onLogout={handleLogout} 
         onSearch={setSearchQuery} 
       />
+      <div className="category-bar">
+  {categories.map(cat => (
+    <button 
+      key={cat}
+      className={`cat-pill ${activeCategory === cat ? 'active' : ''}`}
+      onClick={() => setActiveCategory(cat)}
+    >
+      {cat}
+    </button>
+  ))}
+</div>
 
       <main className="container content-grid" style={{ paddingTop: '40px' }}>
         <div className="product-grid">
