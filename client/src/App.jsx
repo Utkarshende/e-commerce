@@ -44,11 +44,9 @@ function App() {
 
     try {
       setLoading(true);
-      // Inside fetchProducts in App.jsx
-const res = await axios.get(`${API_URL}/api/products`, {
-    headers: { 
-        'x-auth-token': token // Remove the 'Authorization' line to prevent the preflight clash
-    }
+      const res = await axios.get(`${API_URL}/api/products`, {
+        headers: { 
+          'x-auth-token': token,        }
       });
       setProducts(res.data);
     } catch (err) {

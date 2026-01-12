@@ -30,22 +30,18 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Allow requests with no origin (like mobile apps)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-        'Content-Type', 
-        'Authorization', 
-        'x-auth-token', 
-        'Accept', 
-        'Origin'
-    ],
-    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'], // Explicitly allow BOTH
+    credentials: true,
+    optionsSuccessStatus: 200 
 }));
 
 // 4. Database Connection
