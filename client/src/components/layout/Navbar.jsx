@@ -2,15 +2,22 @@ import React from 'react';
 import '../../styles/Navbar.css';
 
 const Navbar = ({ cartCount, onCartClick, user, onLogout, onSearch }) => {
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
   return (
-    <nav className="luxe-navbar">
+    <nav className={`luxe-navbar ${isSearchFocused ? 'search-active' : ''}`}>
       <div className="nav-left">
-        <input 
-          type="text" 
-          placeholder="SEARCH COLLECTION..." 
-          onChange={(e) => onSearch(e.target.value)}
-          className="search-input"
-        />
+        <div className={`search-wrapper ${isSearchFocused ? 'expanded' : ''}`}>
+          <span className="search-icon">🔍</span>
+          <input 
+            type="text" 
+            placeholder="SEARCH THE COLLECTION..." 
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
+            onChange={(e) => onSearch(e.target.value)}
+            className="search-input"
+          />
+        </div>
       </div>
 
       <div className="nav-center">
@@ -18,10 +25,7 @@ const Navbar = ({ cartCount, onCartClick, user, onLogout, onSearch }) => {
       </div>
 
       <div className="nav-right">
-        {user?.isAdmin && <span className="admin-tag">ADMIN</span>}
         <button onClick={onLogout} className="nav-link">LOGOUT</button>
-        
-        {/* This is the critical part for the Cart */}
         <div className="cart-icon-container" onClick={onCartClick}>
           <span className="bag-text">BAG</span>
           <span className="cart-count">({cartCount})</span>

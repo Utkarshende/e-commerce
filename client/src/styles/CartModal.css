@@ -6,7 +6,7 @@
   position: relative;
   border-bottom: 1px solid #eee;
 }
-
+.spacer { width: 30px; } /* Same width as close button to force true center */
 .cart-header h2 {
   font-family: 'Playfair Display', serif;
   font-size: 1.4rem;

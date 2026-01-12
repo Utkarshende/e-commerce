@@ -7,10 +7,11 @@ const CartModal = ({ isOpen, onClose, cartItems, total, onIncrease, onDecrease, 
   return (
     <div className="cart-overlay" onClick={onClose}>
       <div className="cart-panel" onClick={(e) => e.stopPropagation()}>
-        <div className="cart-header">
-          <h2>YOUR BAG</h2>
-          <button className="close-btn" onClick={onClose}>&times;</button>
-        </div>
+       <div className="cart-header">
+  <div className="spacer"></div> {/* Hidden spacer for balance */}
+  <h2>YOUR BAG</h2>
+  <button className="close-btn" onClick={onClose}>&times;</button>
+</div>
 
         {/* Scrollable Area */}
         <div className="cart-items">

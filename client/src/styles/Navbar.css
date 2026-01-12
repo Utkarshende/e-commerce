@@ -2,71 +2,61 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 60px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  padding: 15px 50px;
+  background: #fff;
+  transition: all 0.4s ease;
   border-bottom: 1px solid #f0f0f0;
 }
 
-.nav-center .logo {
-  font-family: 'Playfair Display', serif;
-  letter-spacing: 8px;
-  font-size: 1.5rem;
-  margin: 0;
+/* 1. Search Wrapper Logic */
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  width: 180px; /* Starting width */
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 5px 0;
 }
 
-.nav-center .logo span {
-  color: #d4af37;
-  font-weight: 300;
+.search-wrapper.expanded {
+  width: 350px; /* Expanded width */
+  border-bottom-color: #d4af37;
 }
 
 .search-input {
   border: none;
-  border-bottom: 1px solid #ccc;
-  padding: 5px;
-  font-size: 0.7rem;
-  letter-spacing: 1px;
   outline: none;
-  background: transparent;
-  width: 200px;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  width: 100%;
+  padding-left: 10px;
+  text-transform: uppercase;
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 30px;
+.search-icon {
+  font-size: 0.8rem;
+  opacity: 0.5;
 }
 
-.cart-icon-container {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 1px;
+/* 2. Fade effect for other elements when searching */
+.nav-center, .nav-right {
+  transition: opacity 0.4s ease, filter 0.4s ease;
 }
 
-.cart-count {
+.search-active .nav-center, 
+.search-active .nav-right {
+  opacity: 0.3;
+  filter: blur(1px); /* Optional: adds a very high-end depth effect */
+}
+
+/* 3. Logo Styles */
+.logo {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 6px;
+  font-size: 1.3rem;
+}
+
+.logo span {
   color: #d4af37;
-}
-
-.admin-tag {
-  font-size: 0.6rem;
-  background: #1a1a1a;
-  color: #fff;
-  padding: 2px 8px;
-  letter-spacing: 1px;
-}
-
-.nav-link {
-  background: none;
-  border: none;
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  cursor: pointer;
-  color: #666;
+  font-weight: 300;
 }

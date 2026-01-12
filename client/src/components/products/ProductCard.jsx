@@ -35,7 +35,7 @@ const ProductCard = ({ product, onAddToCart, isAdmin, onDelete }) => {
   ) : (
     <span className="product-stock sold-out-text">Currently Unavailable</span>
   )}
-</div>a
+</div>
 
         <button 
           className="add-to-cart-btn" 
