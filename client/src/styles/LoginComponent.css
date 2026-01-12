@@ -1,84 +1,155 @@
-.auth-container {
-  height: 100vh;
+.luxury-auth-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f4f4f7; /* Light luxury grey */
-  font-family: 'Inter', sans-serif;
+  height: 100vh;
+  width: 100vw;
+  background: #fff;
+  overflow: hidden;
 }
 
-.auth-card {
-  background: #ffffff;
-  padding: 3rem;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+/* --- Visual Side (Left) --- */
+.auth-visual-side {
+  flex: 1.2;
+  position: relative;
+  overflow: hidden;
+}
+
+.ken-burns-animation {
   width: 100%;
-  max-width: 420px;
-  text-align: center;
-  border: 1px solid #eaeaea;
+  height: 100%;
+  object-fit: cover;
+  animation: zoomSlow 30s ease-out infinite alternate;
 }
 
-.auth-card h2 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+@keyframes zoomSlow {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+.overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.1));
+  z-index: 1;
+}
+
+.brand-signature {
+  position: absolute;
+  bottom: 8%;
+  left: 8%;
+  z-index: 2;
+  color: #fff;
+}
+
+.brand-signature h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  letter-spacing: 15px;
+  margin: 0;
+}
+
+/* --- Form Side (Right) --- */
+.auth-form-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px;
+  background: white;
+}
+
+.form-content-reveal {
+  width: 100%;
+  max-width: 400px;
+  animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.auth-header p {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 50px;
+}
+
+/* --- Floating Labels --- */
+.floating-input {
+  position: relative;
+  margin-bottom: 35px;
+}
+
+.floating-input input {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1rem;
+  background: transparent;
+  outline: none;
+  transition: border-color 0.4s;
+}
+
+.floating-input label {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  color: #999;
+  pointer-events: none;
+  transition: 0.4s ease all;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+}
+
+.floating-input input:focus ~ label,
+.floating-input input:not(:placeholder-shown) ~ label {
+  top: -15px;
+  font-size: 0.65rem;
   color: #1a1a1a;
   font-weight: 700;
 }
 
-.auth-card p.subtitle {
-  color: #666;
-  margin-bottom: 2rem;
-  font-size: 0.95rem;
+.floating-input input:focus {
+  border-bottom: 1px solid #1a1a1a;
 }
 
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.auth-form input {
+/* --- Luxury Button --- */
+.luxury-submit-btn {
   width: 100%;
-  padding: 14px 16px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-}
-
-.auth-form input:focus {
-  border-color: #000;
-  outline: none;
-}
-
-.auth-btn {
-  width: 100%;
-  padding: 14px;
-  background: #000;
-  color: #fff;
+  padding: 22px;
+  background: #1a1a1a;
+  color: white;
   border: none;
-  border-radius: 10px;
-  font-size: 1rem;
+  letter-spacing: 5px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.3s ease;
-  margin-top: 10px;
+  transition: all 0.4s;
 }
 
-.auth-btn:hover {
-  opacity: 0.85;
+.luxury-submit-btn:hover {
+  background: #d4af37; /* Luxe Gold */
+  transform: translateY(-2px);
 }
 
-.toggle-auth {
-  margin-top: 25px;
-  font-size: 0.9rem;
-  color: #555;
-  cursor: pointer;
+.luxury-submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
 }
 
-.toggle-auth span {
-  color: #000;
-  font-weight: 600;
-  text-decoration: underline;
+.auth-helper-text {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.7rem;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
