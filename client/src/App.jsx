@@ -8,6 +8,7 @@ import './styles/App.css'; // Adjust path if your folder is named differently
 import Navbar from './components/layout/Navbar';
 import CategoryBar from './components/layout/CategoryBar';
 import AddedToCartToast from './components/layout/AddedToCartToast';
+import Footer from './components/layout/Footer';
 
 // Product Components
 import ProductCard from './components/products/ProductCard';
@@ -165,6 +166,7 @@ function App() {
           activeCategory={selectedCategory} 
           onCategoryChange={setSelectedCategory} 
         />
+    
 
         <div className="product-grid">
           {filteredProducts.length > 0 ? (
@@ -210,6 +212,7 @@ function App() {
         total={cartTotal}
         onConfirm={handleConfirmPayment}
       />
+          <Footer/>
     </div>
   );
 }
