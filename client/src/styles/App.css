@@ -41,11 +41,10 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 50px 30px; /* Large vertical gap, tighter horizontal gap */
-  max-width: 1400px;
-  margin: 60px auto;
+  display: flex;
+  flex-direction: column; /* Stack rows vertically */
+  max-width: 1200px;
+  margin: 80px auto;
   padding: 0 40px;
 }
 

@@ -43,7 +43,6 @@
   font-size: 1.2rem;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
   color: #1a1a1a;
 }
 
@@ -81,12 +80,119 @@
   width: 100%;
   padding: 15px;
   background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(5px);
   transform: translateY(100%);
   transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
   z-index: 30;
   display: flex;
   justify-content: center;
+}
+/* 1. The Row Layout */
+.index-product-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 0;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.index-product-row:hover {
+  border-bottom-color: #1a1a1a;
+}
+
+/* 2. Numbering and Text */
+.product-main-link {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex: 1;
+}
+
+.product-index {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #888;
+  width: 30px;
+}
+
+.product-title-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; /* Large like Bécane */
+  letter-spacing: 2px;
+  margin: 0;
+  color: #1a1a1a;
+  transition: transform 0.4s ease;
+}
+
+.index-product-row:hover .product-title-text {
+  transform: translateX(20px); /* Subtle slide on hover */
+}
+
+/* 3. THE FLOATING IMAGE - The Magic Part */
+.hover-image-container {
+  position: absolute;
+  left: 40%;
+  top: 50%;
+  transform: translateY(-50%) scale(0.8);
+  width: 200px;
+  height: 260px;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.index-product-row:hover .hover-image-container {
+  opacity: 1;
+  transform: translateY(-50%) scale(1) rotate(2deg); /* Swings in slightly */
+}
+
+.index-hover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 4. Actions Area */
+.product-meta-actions {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.product-price-index {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.wishlist-heart-minimal {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #ccc;
+  transition: 0.3s;
+}
+
+.wishlist-heart-minimal.active { color: #d4af37; }
+
+.add-bag-minimal {
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  opacity: 0; /* Hidden until hover like a high-end site */
+  transition: 0.3s;
+}
+
+.index-product-row:hover .add-bag-minimal {
+  opacity: 1;
 }
 
 .product-card:hover .image-overlay-actions {

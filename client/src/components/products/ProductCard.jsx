@@ -1,28 +1,38 @@
 import React from 'react';
 import '../../styles/ProductCard.css';
 
-const ProductCard = ({ product, onAddToCart, onToggleWishlist, isWishlisted, onQuickView }) => {
+const ProductCard = ({ product, index, onAddToCart, onToggleWishlist, isWishlisted }) => {
+  // Format index as 00, 01, 02
+  const displayIndex = index < 10 ? `0${index}` : index;
+
   return (
-    <div className="product-card">
-      <div className="product-image-container">
-        <button className={`wishlist-heart ${isWishlisted ? 'active' : ''}`} onClick={() => onToggleWishlist(product)}>
+    <div className="index-product-row">
+      {/* Number and Name */}
+      <div className="product-main-link">
+        <span className="product-index">{displayIndex}.</span>
+        <h3 className="product-title-text">{product.name.toUpperCase()}</h3>
+      </div>
+
+      {/* The Hover Image - This only shows on hover of the row */}
+      <div className="hover-image-container">
+        <img src={product.image} alt={product.name} className="index-hover-img" />
+      </div>
+
+      {/* Right Side Actions */}
+      <div className="product-meta-actions">
+        <span className="product-price-index">${product.price}</span>
+        <button 
+          className={`wishlist-heart-minimal ${isWishlisted ? 'active' : ''}`} 
+          onClick={() => onToggleWishlist(product)}
+        >
           {isWishlisted ? '♥' : '♡'}
         </button>
-        <img src={product.image} alt={product.name} className="product-card-img primary" />
-        <img src={product.backImage || product.image} alt={product.name} className="product-card-img secondary" />
-        <div className="image-overlay-actions">
-           <button className="view-details-btn" onClick={() => onQuickView(product)}>VIEW DETAILS</button>
-        </div>
-      </div>
-      <div className="product-info">
-        <span className="product-category">{product.category}</span>
-        <h3 className="product-name">{product.name}</h3>
-        <p className="product-price">${product.price}</p>
-        <button className="add-to-cart-btn" onClick={() => onAddToCart(product)} disabled={product.stock <= 0}>
-          {product.stock > 0 ? 'ADD TO BAG' : 'SOLD OUT'}
+        <button className="add-bag-minimal" onClick={() => onAddToCart(product)}>
+          ADD TO BAG
         </button>
       </div>
     </div>
   );
 };
+
 export default ProductCard;
