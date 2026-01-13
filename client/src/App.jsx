@@ -42,6 +42,23 @@ function App() {
     }
     fetchProducts();
   }, []);
+  useEffect(() => {
+  const savedWishlist = localStorage.getItem('luxe_wishlist');
+  const savedOrders = localStorage.getItem('luxe_orders');
+  
+  if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
+  if (savedOrders) setOrders(JSON.parse(savedOrders));
+}, []);
+
+// 2. Automatically Save Wishlist whenever it changes
+useEffect(() => {
+  localStorage.setItem('luxe_wishlist', JSON.stringify(wishlist));
+}, [wishlist]);
+
+// 3. Automatically Save Orders whenever they change
+useEffect(() => {
+  localStorage.setItem('luxe_orders', JSON.stringify(orders));
+}, [orders]);
 
   const fetchProducts = async () => {
     try {
