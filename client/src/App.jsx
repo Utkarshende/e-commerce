@@ -5,7 +5,7 @@ import axios from 'axios';
 import Navbar from './components/layout/Navbar';
 import CategoryBar from './components/layout/CategoryBar';
 import ProductCard from './components/products/ProductCard';
-import LoginComponent from './components/auth/LoginComponent';
+import LoginComponent from './auth/LoginComponent';
 import OrderHistory from './components/profile/OrderHistory';
 import Footer from './components/layout/Footer';
 
@@ -109,6 +109,18 @@ function App() {
           {/* Modals */}
           {isHistoryOpen && <OrderHistory orders={orders} onClose={() => setIsHistoryOpen(false)} />}
           <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cart} total={cart.reduce((acc, i) => acc + (i.price * i.quantity), 0)} onCheckout={() => {setIsCartOpen(false); setIsQRModalOpen(true);}} />
+          // inside App.jsx return
+<CartDrawer 
+  isOpen={isCartOpen} 
+  onClose={() => setIsCartOpen(false)} 
+  cartItems={cart}
+  onUpdateQuantity={(id, newQty) => {
+    if (newQty < 1) return;
+    setCart(prev => prev.map(item => item._id === id ? { ...item, quantity: newQty } : item));
+  }}
+  onRemove={(id) => setCart(prev => prev.filter(item => item._id !== id))}
+  total={cart.reduce((acc, i) => acc + (i.price * i.quantity), 0)}
+/>
           <WishlistModal isOpen={isWishlistOpen} onClose={() => setIsWishlistOpen(false)} wishlistItems={wishlist} onMoveToBag={(p) => {addToCart(p); setWishlist(prev => prev.filter(i => i._id !== p._id));}} onRemove={(p) => setWishlist(prev => prev.filter(i => i._id !== p._id))} />
           <QuickViewModal product={selectedQuickView} isOpen={!!selectedQuickView} onClose={() => setSelectedQuickView(null)} onAddToCart={addToCart} />
           <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} total={cart.reduce((acc, i) => acc + (i.price * i.quantity), 0)} onConfirm={() => {setOrders(prev => [{orderId: Date.now(), items: [...cart], total: 100}, ...prev]); setCart([]); setIsQRModalOpen(false);}} />
