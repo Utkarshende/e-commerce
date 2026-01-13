@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
-// Styles
-import './styles/App.css'; 
-
 // Components
 import Navbar from './components/layout/Navbar';
 import CategoryBar from './components/layout/CategoryBar';
 import AddedToCartToast from './components/layout/AddedToCartToast';
 import ProductCard from './components/products/ProductCard';
-import LoginComponent from './pages/LoginComponent'; // Ensure path is correct
+import LoginComponent from './pages/LoginComponent';
 
 // Modals
 import CartModal from './components/modals/CartModal';
 import QRModal from './components/modals/QRModal';
+import WishlistModal from './components/modals/WishlistModal';
 import QuickViewModal from './components/modals/QuickViewModal';
 
 const API_URL = "http://localhost:5000";
@@ -22,28 +20,23 @@ function App() {
   const [products, setProducts] = useState([]);
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [wishlist, setWishlist] = useState([]);
+
+  // Modal UI States
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [selectedQuickView, setSelectedQuickView] = useState(null);
-
-const moveToBag = (product) => {
-  addToCart(product); // Use your existing addToCart function
-  toggleWishlist(product); // Remove it from wishlist once moved
-};
-
-  // UI States
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  
+  // Feedback UI
   const [showToast, setShowToast] = useState(false);
   const [lastAddedItem, setLastAddedItem] = useState("");
 
-  // --- INITIAL LOAD ---
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     const savedToken = localStorage.getItem('token');
-    
     if (savedUser && savedToken) {
       setUser(JSON.parse(savedUser));
     }
@@ -59,7 +52,7 @@ const moveToBag = (product) => {
     }
   };
 
-  // --- AUTH ACTIONS ---
+  // --- Auth Actions ---
   const handleLogin = (data) => {
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
@@ -67,15 +60,13 @@ const moveToBag = (product) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('luxe_cart');
+    localStorage.clear();
     setUser(null);
     setCart([]);
-    setIsCartOpen(false);
+    setWishlist([]);
   };
 
-  // --- CART ACTIONS ---
+  // --- Cart Actions ---
   const addToCart = (product) => {
     if (product.stock <= 0) return;
     setLastAddedItem(product.name);
@@ -88,18 +79,6 @@ const moveToBag = (product) => {
       return [...prev, { ...product, quantity: 1 }];
     });
   };
-const toggleWishlist = (product) => {
-  setWishlist((prev) => {
-    const isBookmarked = prev.find(item => item._id === product._id);
-    if (isBookmarked) {
-      return prev.filter(item => item._id !== product._id);
-    }
-    return [...prev, product];
-  });
-  
-  // This line ensures that clicking the heart also opens the detail view
-  setSelectedQuickView(product); 
-};
 
   const handleDecrease = (id) => {
     setCart(prev => {
@@ -109,7 +88,21 @@ const toggleWishlist = (product) => {
     });
   };
 
-  // --- COMPUTED ---
+  // --- Wishlist Actions ---
+  const toggleWishlist = (product) => {
+    setWishlist(prev => {
+      const exists = prev.find(item => item._id === product._id);
+      if (exists) return prev.filter(item => item._id !== product._id);
+      return [...prev, product];
+    });
+  };
+
+  const moveToBagFromWishlist = (product) => {
+    addToCart(product);
+    toggleWishlist(product);
+  };
+
+  // --- Computed Values ---
   const filteredProducts = useMemo(() => {
     return products.filter(p => {
       const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -121,43 +114,41 @@ const toggleWishlist = (product) => {
   const cartTotal = useMemo(() => cart.reduce((acc, i) => acc + (i.price * i.quantity), 0), [cart]);
   const cartCount = useMemo(() => cart.reduce((acc, i) => acc + i.quantity, 0), [cart]);
 
-  // --- RENDER LOGIC ---
   return (
     <div className="app-container">
       {!user ? (
-        /* SHOW LOGIN IF NO USER */
         <LoginComponent onLogin={handleLogin} API_URL={API_URL} />
       ) : (
-        /* SHOW STORE IF USER LOGGED IN */
         <>
           <AddedToCartToast show={showToast} itemName={lastAddedItem} onClose={() => setShowToast(false)} />
           
           <Navbar 
             user={user} 
-  cartCount={cartCount} 
-  wishlistCount={wishlist.length}
-  onCartClick={() => setIsCartOpen(true)}
-  onWishlistClick={() => setIsWishlistOpen(true)} // You need to create this state
-  onSearch={setSearchQuery}
-  onLogout={handleLogout}
+            cartCount={cartCount} 
+            wishlistCount={wishlist.length}
+            onCartClick={() => setIsCartOpen(true)} 
+            onWishlistClick={() => setIsWishlistOpen(true)}
+            onSearch={setSearchQuery}
+            onLogout={handleLogout} 
           />
 
           <main className="main-content">
             <CategoryBar activeCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
             <div className="product-grid">
               {filteredProducts.map(product => (
-                <ProductCard key={product._id} product={product} onAddToCart={() => addToCart(product)}
-                onToggleWishlist={toggleWishlist} // This is the function you created
-    isWishlisted={wishlist.some(item => item._id === product._id)} />
+                <ProductCard 
+                  key={product._id} 
+                  product={product} 
+                  onAddToCart={() => addToCart(product)} 
+                  onToggleWishlist={toggleWishlist}
+                  isWishlisted={wishlist.some(i => i._id === product._id)}
+                  onQuickView={(p) => setSelectedQuickView(p)}
+                />
               ))}
             </div>
           </main>
-<QuickViewModal 
-  product={selectedQuickView} 
-  isOpen={!!selectedQuickView} 
-  onClose={() => setSelectedQuickView(null)} 
-  onAddToCart={addToCart} 
-/>
+
+          {/* All Luxury Modals */}
           <CartModal 
             isOpen={isCartOpen} 
             onClose={() => setIsCartOpen(false)} 
@@ -168,7 +159,27 @@ const toggleWishlist = (product) => {
             onCheckout={() => { setIsCartOpen(false); setIsQRModalOpen(true); }} 
           />
 
-          <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} total={cartTotal} onConfirm={() => { alert("Order Placed!"); setCart([]); setIsQRModalOpen(false); }} />
+          <WishlistModal 
+            isOpen={isWishlistOpen} 
+            onClose={() => setIsWishlistOpen(false)} 
+            wishlistItems={wishlist}
+            onMoveToBag={moveToBagFromWishlist}
+            onRemove={toggleWishlist}
+          />
+
+          <QuickViewModal 
+            product={selectedQuickView} 
+            isOpen={!!selectedQuickView} 
+            onClose={() => setSelectedQuickView(null)} 
+            onAddToCart={addToCart} 
+          />
+
+          <QRModal 
+            isOpen={isQRModalOpen} 
+            onClose={() => setIsQRModalOpen(false)} 
+            total={cartTotal} 
+            onConfirm={() => { alert("Order Placed!"); setCart([]); setIsQRModalOpen(false); }} 
+          />
         </>
       )}
     </div>
