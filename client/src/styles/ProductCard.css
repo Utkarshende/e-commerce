@@ -5,6 +5,7 @@
   transition: all 0.4s ease;
   position: relative;
   border: 1px solid #f2f2f2;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
 .product-card:hover {
@@ -14,10 +15,12 @@
 
 .product-image-container {
   position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 4; /* Elegant portrait ratio */
+  width: 80%;
+  aspect-ratio: 3/ 1; /* Elegant portrait ratio */
   overflow: hidden;
   background: #f9f9f9;
+  padding-top: 100px;
+  margin: 0 auto;
 }
 
 /* THE HEART ICON - Fixed visibility */

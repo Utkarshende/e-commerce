@@ -54,7 +54,7 @@
   max-width: 1200px;
   margin: 80px auto;
   padding: 0 40px;
-}
+  gap: 40px;}
 
 @media (max-width: 768px) {
   .category-bar { gap: 8px; flex-wrap: wrap; }
