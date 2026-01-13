@@ -128,6 +128,7 @@ function App() {
             wishlistCount={wishlist.length}
             onCartClick={() => setIsCartOpen(true)} 
             onWishlistClick={() => setIsWishlistOpen(true)}
+            onProfileClick={() => setIsHistoryOpen(true)} // This triggers the history
             onSearch={setSearchQuery}
             onLogout={handleLogout} 
           />
@@ -171,6 +172,7 @@ function App() {
             product={selectedQuickView} 
             isOpen={!!selectedQuickView} 
             onClose={() => setSelectedQuickView(null)} 
+            onConfirm={completeOrder} // Uses our new order-saving logic
             onAddToCart={addToCart} 
           />
 
