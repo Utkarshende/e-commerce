@@ -14,6 +14,7 @@ import LoginComponent from './pages/LoginComponent'; // Ensure path is correct
 // Modals
 import CartModal from './components/modals/CartModal';
 import QRModal from './components/modals/QRModal';
+import QuickViewModal from './components/modals/QuickViewModal';
 
 const API_URL = "http://localhost:5000";
 
@@ -25,6 +26,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [wishlist, setWishlist] = useState([]);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [selectedQuickView, setSelectedQuickView] = useState(null);
 
 const moveToBag = (product) => {
   addToCart(product); // Use your existing addToCart function
@@ -86,14 +88,17 @@ const moveToBag = (product) => {
       return [...prev, { ...product, quantity: 1 }];
     });
   };
-  const toggleWishlist = (product) => {
+const toggleWishlist = (product) => {
   setWishlist((prev) => {
     const isBookmarked = prev.find(item => item._id === product._id);
     if (isBookmarked) {
-      return prev.filter(item => item._id !== product._id); // Remove
+      return prev.filter(item => item._id !== product._id);
     }
-    return [...prev, product]; // Add
+    return [...prev, product];
   });
+  
+  // This line ensures that clicking the heart also opens the detail view
+  setSelectedQuickView(product); 
 };
 
   const handleDecrease = (id) => {
@@ -147,7 +152,12 @@ const moveToBag = (product) => {
               ))}
             </div>
           </main>
-
+<QuickViewModal 
+  product={selectedQuickView} 
+  isOpen={!!selectedQuickView} 
+  onClose={() => setSelectedQuickView(null)} 
+  onAddToCart={addToCart} 
+/>
           <CartModal 
             isOpen={isCartOpen} 
             onClose={() => setIsCartOpen(false)} 

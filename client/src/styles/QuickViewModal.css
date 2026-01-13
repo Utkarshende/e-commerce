@@ -1,0 +1,67 @@
+.quickview-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.4s ease;
+}
+
+.quickview-content {
+  background: white;
+  width: 90%;
+  max-width: 1000px;
+  height: 80vh;
+  position: relative;
+  display: flex;
+  animation: scaleUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qv-body {
+  display: flex;
+  width: 100%;
+}
+
+.qv-images {
+  flex: 1.2;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 10px;
+  padding: 20px;
+}
+
+.qv-main-img { width: 100%; object-fit: cover; }
+
+.qv-details {
+  flex: 1;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+}
+
+.qv-category { font-size: 0.7rem; letter-spacing: 3px; color: #888; }
+.qv-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 10px 0; }
+.qv-price { font-size: 1.2rem; margin-bottom: 30px; }
+
+.qv-add-btn {
+  margin-top: auto;
+  padding: 20px;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  letter-spacing: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.qv-add-btn:hover { background: #d4af37; }
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

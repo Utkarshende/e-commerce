@@ -13,15 +13,16 @@ const ProductCard = ({ product, onAddToCart, isAdmin, onDelete, onToggleWishlist
       <div className="product-image-container">
         {/* --- WISHLIST HEART ICON --- */}
         <button 
-          className={`wishlist-icon-btn ${isWishlisted ? 'active' : ''}`}
-          onClick={(e) => {
-            e.stopPropagation(); // Prevents triggering other clicks
-            onToggleWishlist(product);
-          }}
-          aria-label="Add to wishlist"
-        >
-          {isWishlisted ? '♥' : '♡'}
-        </button>
+  className={`wishlist-icon-btn ${isWishlisted ? 'active' : ''}`}
+  onClick={(e) => {
+    e.stopPropagation(); // Prevents clicking the whole card
+    onToggleWishlist(product);
+  }}>
+  {isWishlisted ? '♥' : '♡'}
+</button>
+        <button className="quick-view-btn" onClick={() => onQuickView(product)}>
+  QUICK LOOK
+</button>
 
         {/* Main Image */}
         <img src={product.image} alt={product.name} className="product-card-img primary" />
