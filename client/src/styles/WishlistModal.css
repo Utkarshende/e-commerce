@@ -1,0 +1,39 @@
+.wishlist-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.move-to-bag-btn {
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.move-to-bag-btn:hover {
+  background: #d4af37;
+}
+
+.remove-wishlist-btn {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 0.6rem;
+  text-decoration: underline;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.empty-msg {
+  text-align: center;
+  margin-top: 100px;
+  color: #bbb;
+  letter-spacing: 3px;
+  font-size: 0.8rem;
+}

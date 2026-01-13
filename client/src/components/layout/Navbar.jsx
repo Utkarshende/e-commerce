@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/Navbar.css';
 
-const Navbar = ({ user, cartCount, onCartClick, onSearch, onLogout }) => {
+const Navbar = ({ user, cartCount, onCartClick, onSearch, onLogout, wishlistCount, onWishlistClick }) => {
   const [isSearchActive, setIsSearchActive] = useState(false);
 
   return (
@@ -35,9 +35,18 @@ const Navbar = ({ user, cartCount, onCartClick, onSearch, onLogout }) => {
             </div>
           )}
 
-          <div className="nav-cart-trigger" onClick={onCartClick}>
-            <span className="cart-label">BAG</span>
-            <span className="cart-badge">{cartCount}</span>
+          <div className="nav-icons-group">
+            {/* Wishlist Trigger */}
+            <div className="wishlist-trigger" onClick={onWishlistClick}>
+              <span className="heart-icon">{wishlistCount > 0 ? '♥' : '♡'}</span>
+              {wishlistCount > 0 && <span className="wishlist-count">{wishlistCount}</span>}
+            </div>
+
+            {/* Bag Trigger */}
+            <div className="nav-cart-trigger" onClick={onCartClick}>
+              <span className="cart-label">BAG</span>
+              <span className="cart-badge">{cartCount}</span>
+            </div>
           </div>
         </div>
       </div>

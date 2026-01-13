@@ -23,6 +23,13 @@ function App() {
   const [cart, setCart] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [wishlist, setWishlist] = useState([]);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+
+const moveToBag = (product) => {
+  addToCart(product); // Use your existing addToCart function
+  toggleWishlist(product); // Remove it from wishlist once moved
+};
 
   // UI States
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -79,6 +86,15 @@ function App() {
       return [...prev, { ...product, quantity: 1 }];
     });
   };
+  const toggleWishlist = (product) => {
+  setWishlist((prev) => {
+    const isBookmarked = prev.find(item => item._id === product._id);
+    if (isBookmarked) {
+      return prev.filter(item => item._id !== product._id); // Remove
+    }
+    return [...prev, product]; // Add
+  });
+};
 
   const handleDecrease = (id) => {
     setCart(prev => {
@@ -113,17 +129,21 @@ function App() {
           
           <Navbar 
             user={user} 
-            cartCount={cartCount} 
-            onCartClick={() => setIsCartOpen(true)} 
-            onSearch={setSearchQuery}
-            onLogout={handleLogout} 
+  cartCount={cartCount} 
+  wishlistCount={wishlist.length}
+  onCartClick={() => setIsCartOpen(true)}
+  onWishlistClick={() => setIsWishlistOpen(true)} // You need to create this state
+  onSearch={setSearchQuery}
+  onLogout={handleLogout}
           />
 
           <main className="main-content">
             <CategoryBar activeCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
             <div className="product-grid">
               {filteredProducts.map(product => (
-                <ProductCard key={product._id} product={product} onAddToCart={() => addToCart(product)} />
+                <ProductCard key={product._id} product={product} onAddToCart={() => addToCart(product)}
+                onToggleWishlist={toggleWishlist} // This is the function you created
+    isWishlisted={wishlist.some(item => item._id === product._id)} />
               ))}
             </div>
           </main>
