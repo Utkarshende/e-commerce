@@ -41,6 +41,14 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 .product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 40px 25px;
+  max-width: 1400px;
+  margin: 60px auto;
+  padding: 0 40px;
+}
+.product-grid {
   display: flex;
   flex-direction: column; /* Stack rows vertically */
   max-width: 1200px;

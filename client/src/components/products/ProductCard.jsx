@@ -1,33 +1,39 @@
 import React from 'react';
 import '../../styles/ProductCard.css';
 
-const ProductCard = ({ product, index, onAddToCart, onToggleWishlist, isWishlisted }) => {
-  // Format index as 00, 01, 02
-  const displayIndex = index < 10 ? `0${index}` : index;
-
+const ProductCard = ({ product, onAddToCart, onToggleWishlist, isWishlisted, onQuickView }) => {
   return (
-    <div className="index-product-row">
-      {/* Number and Name */}
-      <div className="product-main-link">
-        <span className="product-index">{displayIndex}.</span>
-        <h3 className="product-title-text">{product.name.toUpperCase()}</h3>
-      </div>
-
-      {/* The Hover Image - This only shows on hover of the row */}
-      <div className="hover-image-container">
-        <img src={product.image} alt={product.name} className="index-hover-img" />
-      </div>
-
-      {/* Right Side Actions */}
-      <div className="product-meta-actions">
-        <span className="product-price-index">${product.price}</span>
+    <div className="product-card">
+      <div className="product-image-container">
+        {/* Visible Wishlist Heart */}
         <button 
-          className={`wishlist-heart-minimal ${isWishlisted ? 'active' : ''}`} 
-          onClick={() => onToggleWishlist(product)}
+          className={`wishlist-icon-btn ${isWishlisted ? 'active' : ''}`} 
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleWishlist(product);
+          }}
         >
           {isWishlisted ? '♥' : '♡'}
         </button>
-        <button className="add-bag-minimal" onClick={() => onAddToCart(product)}>
+
+        {/* Hover Image Swap */}
+        <img src={product.image} alt={product.name} className="product-card-img primary" />
+        <img src={product.backImage || product.image} alt={product.name} className="product-card-img secondary" />
+        
+        <div className="image-overlay-actions">
+          <button className="view-details-btn" onClick={() => onQuickView(product)}>
+            QUICK VIEW
+          </button>
+        </div>
+      </div>
+
+      <div className="product-info">
+        <div>
+          <span className="product-category">{product.category}</span>
+          <h3 className="product-name">{product.name}</h3>
+        </div>
+        <p className="product-price">${product.price}</p>
+        <button className="add-to-cart-btn" onClick={() => onAddToCart(product)}>
           ADD TO BAG
         </button>
       </div>
