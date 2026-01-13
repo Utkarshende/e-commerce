@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiPlus, FiMinus, FiTrash2 } from 'react-icons/fi';
-import './CartDrawer.css';
+import '../../styles/CartDrawer.css';
 
 const CartDrawer = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemove, total }) => {
   return (

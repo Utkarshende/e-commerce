@@ -14,6 +14,7 @@ import CartModal from './components/modals/CartModal';
 import QRModal from './components/modals/QRModal';
 import WishlistModal from './components/modals/WishlistModal';
 import QuickViewModal from './components/modals/QuickViewModal';
+import CartDrawer from './components/layout/CartDrawer';
 
 const API_URL = "http://localhost:5000";
 
