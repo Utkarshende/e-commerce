@@ -40,12 +40,11 @@
   border-color: #1a1a1a;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
-
-/* Responsive Grid */
+f
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Smaller min-width */
+  gap: 25px;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;

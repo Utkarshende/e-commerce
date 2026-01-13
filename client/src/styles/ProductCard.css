@@ -1,115 +1,68 @@
+/* 1. Smaller Main Card Container */
 .product-card {
   background: #ffffff;
   border: 1px solid #f0f0f0;
   position: relative;
   overflow: hidden;
-  height: 480px;
+  height: 400px; /* Reduced from 480px */
   display: flex;
   flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.4s ease;
 }
 
-.product-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-  border-color: #d4af37;
-}
-
+/* 2. Image Section (Smaller height) */
 .product-image-container {
   width: 100%;
-  height: 320px;
+  height: 240px; /* Reduced from 320px */
   overflow: hidden;
   background: #f9f9f9;
   position: relative;
 }
 
-/* Image Swap Logic */
-.product-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.6s ease, transform 1.2s cubic-bezier(0, 0, 0.2, 1);
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.product-card-img.primary { z-index: 2; opacity: 1; }
-.product-card-img.secondary { z-index: 1; opacity: 0; transform: scale(1.1); }
-
-.product-card:hover .product-card-img.primary { opacity: 0; }
-.product-card:hover .product-card-img.secondary { opacity: 1; transform: scale(1); }
-
-/* Heart Icon Overlay */
+/* 3. HEART BUTTON (Ensure it's visible) */
 .wishlist-icon-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  z-index: 10;
-  background: white;
+  top: 12px;
+  right: 12px;
+  z-index: 20; /* High z-index to stay above images */
+  background: rgba(255, 255, 255, 0.9);
   border: none;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  color: #1a1a1a;
 }
 
-.wishlist-icon-btn.active { color: #d4af37; }
-
-/* View Details Slide-up */
-.image-overlay-actions {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.9);
-  transform: translateY(100%);
-  transition: transform 0.4s ease;
-  display: flex;
-  justify-content: center;
-  z-index: 5;
+.wishlist-icon-btn.active {
+  color: #d4af37; /* Gold when active */
+  background: #fff;
 }
 
-.product-card:hover .image-overlay-actions { transform: translateY(0); }
-
-.view-details-btn {
-  background: #1a1a1a;
-  color: white;
-  border: none;
-  padding: 10px;
-  font-size: 0.65rem;
-  letter-spacing: 2px;
-  cursor: pointer;
-  width: 100%;
-}
-
-/* Info Section */
+/* 4. Info Section (Tightened spacing) */
 .product-info {
-  padding: 15px;
+  padding: 12px;
   text-align: center;
   flex-grow: 1;
 }
 
-.product-category { font-size: 0.6rem; color: #d4af37; letter-spacing: 2px; text-transform: uppercase; }
-.product-name { font-family: 'Playfair Display', serif; font-size: 1rem; margin: 5px 0; }
-.product-price { font-size: 1.1rem; color: #333; }
-
-.add-to-cart-btn {
-  width: 100%;
-  padding: 12px;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  letter-spacing: 2px;
-  cursor: pointer;
-  margin-top: auto;
+.product-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem; /* Smaller text */
+  margin: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.add-to-cart-btn:hover { background: #d4af37; }
+.product-price {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import './OrderHistory.css';
+import '../../styles/OrderHistory.css';
 
 const OrderHistory = ({ orders, onClose }) => {
   return (

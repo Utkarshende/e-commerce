@@ -6,7 +6,7 @@ import Navbar from './components/layout/Navbar';
 import CategoryBar from './components/layout/CategoryBar';
 import AddedToCartToast from './components/layout/AddedToCartToast';
 import ProductCard from './components/products/ProductCard';
-import LoginComponent from './components/auth/LoginComponent';
+import LoginComponent from './pages/LoginComponent';
 import OrderHistory from './components/profile/OrderHistory';
 
 // Modals
