@@ -1,15 +1,12 @@
-/* 1. Main Card Container */
 .product-card {
   background: #ffffff;
   border: 1px solid #f0f0f0;
-  border-radius: 4px; /* Slight radius for a modern but sharp luxury look */
   position: relative;
   overflow: hidden;
-  height: 450px; /* Controlled height to prevent long scrolling */
+  height: 480px;
   display: flex;
   flex-direction: column;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  animation: luxeFadeUp 0.8s cubic-bezier(0.2, 1, 0.3, 1) both;
 }
 
 .product-card:hover {
@@ -18,161 +15,15 @@
   border-color: #d4af37;
 }
 
-/* 2. Image Section */
 .product-image-container {
   width: 100%;
-  height: 280px; /* Reduced image height */
+  height: 320px;
   overflow: hidden;
   background: #f9f9f9;
   position: relative;
 }
 
-.product-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s ease;
-}
-
-.product-card:hover .product-card-img {
-  transform: scale(1.08);
-}
-
-/* 3. Info Section */
-.product-info {
-  padding: 15px 20px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  text-align: center;
-}
-
-.product-category {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #d4af37; /* Gold category text */
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.product-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 5px;
-  letter-spacing: 0.5px;
-  line-height: 1.2;
-}
-
-.product-price {
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #333;
-  margin-top: 5px;
-}
-
-/* 4. Details Row (Stock) */
-.product-details-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.product-stock {
-  font-size: 0.65rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #999;
-  padding: 2px 8px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  margin: 8px ;
-}
-.stock-low {
-  color: #b22222;
-  border-color: #ffdada;
-  background: #fff5f5;
-  font-weight: 600;
-}
-
-/* 5. Buttons */
-.add-to-cart-btn {
-  width: 100%;
-  padding: 12px;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  font-size: 0.7rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  margin-top: auto; /* Sticks to bottom of card */
-}
-
-.add-to-cart-btn:hover {
-  background: #d4af37;
-}
-
-.add-to-cart-btn:disabled, .sold-out {
-  background: #ccc !important;
-  cursor: not-allowed !important;
-}
-
-/* 6. Admin Controls */
-.admin-delete-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.9);
-  color: #ff4d4d;
-  border: 1px solid #ff4d4d;
-  padding: 4px 10px;
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.admin-delete-badge:hover {
-  background: #ff4d4d;
-  color: white;
-}
-
-/* 7. Animations */
-@keyframes luxeFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Staggered Delay for Grid Reveal */
-.product-card:nth-child(1) { animation-delay: 0.05s; }
-.product-card:nth-child(2) { animation-delay: 0.1s; }
-.product-card:nth-child(3) { animation-delay: 0.15s; }
-.product-card:nth-child(4) { animation-delay: 0.2s; }
-.product-card:nth-child(5) { animation-delay: 0.25s; }
-.product-card:nth-child(6) { animation-delay: 0.3s; }
-
-/* ... Keep the rest of your ProductCard.css as we corrected before ... */
-
-.product-image-container {
-  width: 100%;
-  height: 280px;
-  overflow: hidden;
-  background: #f9f9f9;
-  position: relative; /* Required for absolute positioning of secondary image */
-}
-
+/* Image Swap Logic */
 .product-card-img {
   width: 100%;
   height: 100%;
@@ -183,33 +34,18 @@
   left: 0;
 }
 
-/* Primary is visible by default */
-.product-card-img.primary {
-  z-index: 2;
-  opacity: 1;
-}
+.product-card-img.primary { z-index: 2; opacity: 1; }
+.product-card-img.secondary { z-index: 1; opacity: 0; transform: scale(1.1); }
 
-/* Secondary is hidden by default */
-.product-card-img.secondary {
-  z-index: 1;
-  opacity: 0;
-  transform: scale(1.1); /* Slightly zoomed for a "reveal" effect */
-}
+.product-card:hover .product-card-img.primary { opacity: 0; }
+.product-card:hover .product-card-img.secondary { opacity: 1; transform: scale(1); }
 
-/* Hover States */
-.product-card:hover .product-card-img.primary {
-  opacity: 0;
-}
-
-.product-card:hover .product-card-img.secondary {
-  opacity: 1;
-  transform: scale(1); /* Zooms out slightly into focus */
-}
+/* Heart Icon Overlay */
 .wishlist-icon-btn {
   position: absolute;
   top: 15px;
   right: 15px;
-  z-index: 5;
+  z-index: 10;
   background: white;
   border: none;
   width: 36px;
@@ -218,56 +54,62 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  color: #1a1a1a;
+  transition: 0.3s;
 }
 
-.wishlist-icon-btn:hover {
-  transform: scale(1.1);
-  background: #fdfdfd;
-}
+.wishlist-icon-btn.active { color: #d4af37; }
 
-.wishlist-icon-btn.active {
-  color: #d4af37; /* Luxury Gold */
-  animation: heartBeat 0.4s ease-out;
-}
-
-@keyframes heartBeat {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-  100% { transform: scale(1.1); }
-}
+/* View Details Slide-up */
 .image-overlay-actions {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.8);
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.9);
   transform: translateY(100%);
   transition: transform 0.4s ease;
   display: flex;
   justify-content: center;
+  z-index: 5;
 }
 
-.product-image-container:hover .image-overlay-actions {
-  transform: translateY(0);
-}
+.product-card:hover .image-overlay-actions { transform: translateY(0); }
 
 .view-details-btn {
   background: #1a1a1a;
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 0.7rem;
+  padding: 10px;
+  font-size: 0.65rem;
   letter-spacing: 2px;
   cursor: pointer;
   width: 100%;
 }
 
-.view-details-btn:hover {
-  background: #d4af37;
+/* Info Section */
+.product-info {
+  padding: 15px;
+  text-align: center;
+  flex-grow: 1;
 }
+
+.product-category { font-size: 0.6rem; color: #d4af37; letter-spacing: 2px; text-transform: uppercase; }
+.product-name { font-family: 'Playfair Display', serif; font-size: 1rem; margin: 5px 0; }
+.product-price { font-size: 1.1rem; color: #333; }
+
+.add-to-cart-btn {
+  width: 100%;
+  padding: 12px;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  letter-spacing: 2px;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+.add-to-cart-btn:hover { background: #d4af37; }
