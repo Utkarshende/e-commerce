@@ -9,7 +9,7 @@ import Navbar from './components/layout/Navbar';
 import CategoryBar from './components/layout/CategoryBar';
 import AddedToCartToast from './components/layout/AddedToCartToast';
 import ProductCard from './components/products/ProductCard';
-import LoginComponent from './components/auth/LoginComponent'; // Ensure path is correct
+import LoginComponent from './pages/LoginComponent'; // Ensure path is correct
 
 // Modals
 import CartModal from './components/modals/CartModal';

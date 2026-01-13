@@ -51,7 +51,7 @@ Environment Variables: Secure management of API keys and database strings.
    
 ### [🔗 git clone https](https://github.com/Utkarshende/luxe-store.git)
 
-1. Install Dependencies:
+2. Install Dependencies:
 
 Root folder -
 npm install 
@@ -62,15 +62,19 @@ cd client && npm install
 Server folder -
 cd ../server && npm install
 
-2. Environment Variables: Create a .env file in the /server directory:
+3. Environment Variables: Create a .env file in the /server directory:
 
 MONGO_URI=your_mongodb_uri
+
 JWT_SECRET=your_secret_key
+
 CLOUDINARY_CLOUD_NAME=your_name
+
 CLOUDINARY_API_KEY=your_key
+
 CLOUDINARY_API_SECRET=your_secret
 
-3. Run the Application:
+4. Run the Application:
 
 From the root
 
