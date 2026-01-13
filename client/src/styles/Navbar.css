@@ -29,11 +29,11 @@
 
 .nav-search-container {
   position: relative;
-  width: 300px;
+  width: 250px;
   transition: width 0.4s ease;
 }
 
-.nav-search-container.active { width: 400px; }
+.nav-search-container.active { width: 350px; }
 
 .nav-search-container input {
   width: 100%;
@@ -54,10 +54,9 @@
 .nav-icons-group {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 20px;
 }
 
-/* Member Profile Toggle */
 .welcome-msg.clickable {
   font-size: 0.65rem;
   letter-spacing: 2px;
@@ -69,11 +68,12 @@
 
 .welcome-msg.clickable:hover { color: #d4af37; }
 
-/* Wishlist Icon in Nav */
 .wishlist-trigger {
   position: relative;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
 }
 
 .wishlist-count {
@@ -89,6 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: bold;
 }
 
 .nav-cart-trigger {
@@ -102,10 +103,6 @@
   background: #1a1a1a;
   color: white;
   font-size: 0.65rem;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+  padding: 2px 8px;
+  border-radius: 12px;
 }
