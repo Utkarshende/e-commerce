@@ -109,8 +109,6 @@ function App() {
 
           {/* Modals */}
           {isHistoryOpen && <OrderHistory orders={orders} onClose={() => setIsHistoryOpen(false)} />}
-          <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cart} total={cart.reduce((acc, i) => acc + (i.price * i.quantity), 0)} onCheckout={() => {setIsCartOpen(false); setIsQRModalOpen(true);}} />
-          // inside App.jsx return
 <CartDrawer 
   isOpen={isCartOpen} 
   onClose={() => setIsCartOpen(false)} 
