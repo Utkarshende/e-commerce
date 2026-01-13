@@ -1,38 +1,30 @@
 import React, { useState } from 'react';
 import '../../styles/Navbar.css';
 
-const Navbar = ({ user, cartCount, wishlistCount, onCartClick, onWishlistClick, onSearch, onLogout }) => {
+const Navbar = ({ user, cartCount, wishlistCount, onCartClick, onWishlistClick, onProfileClick, onSearch, onLogout }) => {
+  const [isSearchActive, setIsSearchActive] = useState(false);
   return (
     <nav className="luxury-navbar">
       <div className="nav-container">
-        <div className="nav-brand">
-          <h1 className="logo-text">LUXE</h1>
+        <div className="nav-brand"><h1 className="logo-text">LUXE</h1></div>
+        <div className={`nav-search-container ${isSearchActive ? 'active' : ''}`}>
+          <input type="text" placeholder="SEARCH..." onChange={(e) => onSearch(e.target.value)} onFocus={() => setIsSearchActive(true)} onBlur={() => setIsSearchActive(false)} />
         </div>
-
         <div className="nav-actions">
-          {user && (
-            <div className="user-profile">
-              <span className="welcome-msg">MEMBER: {user.name?.toUpperCase()}</span>
-              <button className="nav-logout-btn" onClick={onLogout}>SIGNOUT</button>
-            </div>
-          )}
-
+          <span className="welcome-msg clickable" onClick={onProfileClick}>MEMBER: {user.name?.toUpperCase()}</span>
           <div className="nav-icons-group">
-            {/* CLICKING THIS OPENS THE WISHLIST MODAL */}
             <div className="wishlist-trigger" onClick={onWishlistClick}>
-              <span className="heart-icon-nav">{wishlistCount > 0 ? '♥' : '♡'}</span>
+              <span>{wishlistCount > 0 ? '♥' : '♡'}</span>
               {wishlistCount > 0 && <span className="wishlist-count">{wishlistCount}</span>}
             </div>
-
             <div className="nav-cart-trigger" onClick={onCartClick}>
-              <span className="cart-label">BAG</span>
-              <span className="cart-badge">{cartCount}</span>
+              <span className="cart-label">BAG ({cartCount})</span>
             </div>
+            <button className="nav-logout-btn" onClick={onLogout}>EXIT</button>
           </div>
         </div>
       </div>
     </nav>
   );
 };
-
 export default Navbar;
