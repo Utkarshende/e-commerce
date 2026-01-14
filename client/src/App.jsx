@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
+import './styles/App.css';
 
 // Components
 import Navbar from './components/layout/Navbar';

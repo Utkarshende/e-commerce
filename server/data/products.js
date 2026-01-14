@@ -52,6 +52,55 @@ const productsData = [
     image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=1000&auto=format&fit=crop",
     stock: 12
   }
+  ,
+  {
+    name: "Monochrome Knit Sweater",
+    description: "Soft cashmere blend with a relaxed fit—everyday luxury.",
+    price: 165.00,
+    category: "Essentials",
+    image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000&auto=format&fit=crop",
+    stock: 30
+  },
+  {
+    name: "Sable Verge Sunglasses",
+    description: "UV400 polarized lenses with a lightweight titanium frame.",
+    price: 220.00,
+    category: "Signature",
+    image: "https://images.unsplash.com/photo-1518546305920-8d21c8b9d9d4?q=80&w=1000&auto=format&fit=crop",
+    stock: 18
+  },
+  {
+    name: "Ceramic Pour-Over Set",
+    description: "Artisan ceramic dripper and server — hand-glazed finish.",
+    price: 95.00,
+    category: "Essentials",
+    image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1000&auto=format&fit=crop",
+    stock: 40
+  },
+  {
+    name: "Midnight Leather Gloves",
+    description: "Soft lambskin gloves with cashmere lining for colder months.",
+    price: 120.00,
+    category: "Limited",
+    image: "https://images.unsplash.com/photo-1541099649105-4f5f0b8cb5b1?q=80&w=1000&auto=format&fit=crop",
+    stock: 7
+  },
+  {
+    name: "Atlas Travel Mug",
+    description: "Double-walled steel mug keeps beverages hot for hours.",
+    price: 45.00,
+    category: "Essentials",
+    image: "https://images.unsplash.com/photo-1567016432779-7a2a4f3a9f8e?q=80&w=1000&auto=format&fit=crop",
+    stock: 60
+  },
+  {
+    name: "Velvet Box Cufflinks",
+    description: "Engineered brass cufflinks plated in ruthenium with velvet box.",
+    price: 75.00,
+    category: "Signature",
+    image: "https://images.unsplash.com/photo-1521068803979-2c5825e7e52d?q=80&w=1000&auto=format&fit=crop",
+    stock: 22
+  }
 ];
 
 module.exports = productsData;
