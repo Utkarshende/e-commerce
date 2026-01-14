@@ -11,6 +11,10 @@
   flex: 0 0 220px;
   border-radius: 8px;
 }
+/* Luxurious cursor for product interactions */
+.product-card, .product-card * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='10' fill='%23d4af37' stroke='%23000000' stroke-width='1.5'/><circle cx='24' cy='24' r='3' fill='%23ffffff' opacity='0.9'/></svg>" ) 24 24, pointer;
+}
 
 .product-card:hover {
   transform: translateY(-5px);
@@ -23,6 +27,27 @@
   aspect-ratio: 4 / 5; /* portrait-style product image */
   overflow: hidden;
   background: #f9f9f9;
+}
+
+/* Shimmer overlay and subtle scale on hover for luxury feel */
+.product-image-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 100%);
+  transform: translateX(-120%);
+  transition: transform 0.8s ease;
+  pointer-events: none;
+}
+
+.product-image-container:hover::after {
+  transform: translateX(120%);
+}
+
+.product-image-container:hover .product-card-img {
+  transform: scale(1.06);
+  transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), filter 0.5s;
+  filter: brightness(1.03) saturate(1.02) drop-shadow(0 12px 30px rgba(212,175,55,0.12));
 }
 
 /* THE HEART ICON - Fixed visibility */
