@@ -27,11 +27,17 @@ const AdminDashboard = ({ onClose }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/products', newProduct, { headers: { 'x-auth-token': token } });
+      console.log('Admin add token:', token);
+      if (!token) {
+        alert('You are not authenticated for admin actions. Please log out and log in again to obtain a token.');
+        return;
+      }
+      await axios.post('http://localhost:5000/api/products', newProduct, { headers: { 'x-auth-token': token, Authorization: `Bearer ${token}` } });
       setNewProduct({ name: '', price: '', category: '', image: '', stock: '' });
       fetchProducts();
     } catch (err) {
       console.error("Error adding product", err);
+      alert(err.response?.data?.message || 'Error adding product - see console');
     }
   };
 
