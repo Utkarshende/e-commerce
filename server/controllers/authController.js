@@ -16,11 +16,14 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        // 2. Create new user (Password hashing happens in the User Model middleware)
+        // 2. Hash password then create new user
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
         user = new User({
             name,
             email,
-            password
+            password: hashedPassword
         });
 
         await user.save();
