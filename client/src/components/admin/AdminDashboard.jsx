@@ -26,7 +26,8 @@ const AdminDashboard = ({ onClose }) => {
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/products', newProduct);
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5000/api/products', newProduct, { headers: { 'x-auth-token': token } });
       setNewProduct({ name: '', price: '', category: '', image: '', stock: '' });
       fetchProducts();
     } catch (err) {
@@ -36,7 +37,8 @@ const AdminDashboard = ({ onClose }) => {
 
   const deleteProduct = async (id) => {
     if (window.confirm("Are you sure you want to delete this piece?")) {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost:5000/api/products/${id}`, { headers: { 'x-auth-token': token } });
       fetchProducts();
     }
   };
@@ -47,7 +49,8 @@ const AdminDashboard = ({ onClose }) => {
   };
 
   const handleUpdate = async (id) => {
-    await axios.put(`http://localhost:5000/api/products/${id}`, editData);
+    const token = localStorage.getItem('token');
+    await axios.put(`http://localhost:5000/api/products/${id}`, editData, { headers: { 'x-auth-token': token } });
     setEditingId(null);
     fetchProducts();
   };

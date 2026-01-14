@@ -79,7 +79,11 @@ function App() {
   return (
     <div className="app-container">
       {!user ? (
-        <LoginComponent onLogin={(data) => {setUser(data.user); localStorage.setItem('user', JSON.stringify(data.user));}} API_URL={API_URL} />
+        <LoginComponent onLogin={(data) => {
+          setUser(data.user);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          if (data.token) localStorage.setItem('token', data.token);
+        }} API_URL={API_URL} />
       ) : (    <>
           {isAdminOpen ? (
             <AdminDashboard onClose={() => setIsAdminOpen(false)} />
