@@ -21,6 +21,27 @@ const LoginComponent = ({ onLogin, API_URL }) => {
     }
   };
 
+  const loginAsAdmin = async () => {
+    setLoading(true);
+    const adminCreds = { email: 'admin@luxe.com', password: 'password123', name: 'Admin' };
+    try {
+      // Try login first
+      const res = await axios.post(`${API_URL}/api/auth/login`, { email: adminCreds.email, password: adminCreds.password });
+      onLogin(res.data);
+    } catch (err) {
+      // If login fails, try registering then login
+      try {
+        await axios.post(`${API_URL}/api/auth/register`, adminCreds);
+        const res2 = await axios.post(`${API_URL}/api/auth/login`, { email: adminCreds.email, password: adminCreds.password });
+        onLogin(res2.data);
+      } catch (regErr) {
+        alert('Unable to create or login admin: ' + (regErr.response?.data?.message || regErr.message));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="luxury-auth-wrapper">
       {/* Left Section: Cinematic Visual */}
@@ -72,6 +93,12 @@ a
               {loading ? "AUTHENTICATING..." : "ENTER STORE"}
             </button>
           </form>
+
+          <div style={{marginTop: 12}}>
+            <button className="luxury-admin-btn" onClick={loginAsAdmin} disabled={loading}>
+              {loading ? 'PLEASE WAIT...' : 'LOGIN AS ADMIN'}
+            </button>
+          </div>
 
           <footer className="auth-helper-text">
             <p>Secure encryption enabled for private collections.</p>

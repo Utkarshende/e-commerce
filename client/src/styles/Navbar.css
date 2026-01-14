@@ -51,6 +51,22 @@
   gap: 30px;
 }
 
+/* Admin and Logout buttons */
+.nav-admin-btn, .nav-logout-btn {
+  background: linear-gradient(90deg, #d4af37, #b7862b);
+  color: #111;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.nav-admin-btn:hover, .nav-logout-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.18); }
+.nav-admin-btn { margin-right: 8px; }
+
 .nav-icons-group {
   display: flex;
   align-items: center;
