@@ -41,23 +41,18 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 .product-grid {
+  /* Responsive grid that keeps cards side-by-side */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 40px 25px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 28px 20px;
   max-width: 1400px;
   margin: 60px auto;
-  padding: 0 40px;
+  padding: 0 24px;
+  align-items: start;
 }
-.product-grid {
-  display: flex;
-  flex-direction: column; /* Stack rows vertically */
-  max-width: 1200px;
-  margin: 80px auto;
-  padding: 0 40px;
-  gap: 40px;}
 
 @media (max-width: 768px) {
   .category-bar { gap: 8px; flex-wrap: wrap; }
   .cat-pill { padding: 8px 16px; font-size: 0.65rem; }
-  .product-grid { grid-template-columns: 1fr; }
+  .product-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 16px; }
 }

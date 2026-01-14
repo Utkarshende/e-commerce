@@ -22,6 +22,9 @@
 .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
 .admin-header h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 400; }
 
+.admin-back-btn { background: none; border: 1px solid var(--admin-dark); color: var(--admin-dark); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; letter-spacing: 1px; }
+.admin-back-btn:hover { background: var(--admin-dark); color: white; }
+
 /* Forms */
 .admin-section.card { background: white; padding: 30px; border: 1px solid var(--admin-border); margin-bottom: 40px; }
 .admin-create-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }

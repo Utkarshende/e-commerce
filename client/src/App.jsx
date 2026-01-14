@@ -8,6 +8,7 @@ import ProductCard from './components/products/ProductCard';
 import LoginComponent from './auth/LoginComponent';
 import OrderHistory from './components/profile/OrderHistory';
 import Footer from './components/layout/Footer';
+import AdminDashboard from './components/admin/AdminDashboard';
 
 // Modals
 import CartModal from './components/modals/CartModal';
@@ -33,6 +34,7 @@ function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [selectedQuickView, setSelectedQuickView] = useState(null);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -77,8 +79,11 @@ function App() {
     <div className="app-container">
       {!user ? (
         <LoginComponent onLogin={(data) => {setUser(data.user); localStorage.setItem('user', JSON.stringify(data.user));}} API_URL={API_URL} />
-      ) : (
-        <>
+      ) : (    <>
+          {isAdminOpen ? (
+            <AdminDashboard onClose={() => setIsAdminOpen(false)} />
+          ) : (
+            <>
           <Navbar 
             user={user} 
             cartCount={cart.reduce((acc, i) => acc + i.quantity, 0)} 
@@ -88,8 +93,7 @@ function App() {
             onProfileClick={() => setIsHistoryOpen(true)}
             onSearch={setSearchQuery} 
             onLogout={() => { localStorage.clear(); setUser(null); }} 
-          />
-          
+            onAdminClick={() => setIsAdminOpen(true)}/>
           <main className="main-content">
             <CategoryBar activeCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
             <div className="product-grid">
@@ -104,9 +108,7 @@ function App() {
               ))}
             </div>
           </main>
-
           <Footer />
-
           {/* Modals */}
           {isHistoryOpen && <OrderHistory orders={orders} onClose={() => setIsHistoryOpen(false)} />}
 <CartDrawer 
@@ -118,15 +120,17 @@ function App() {
     setCart(prev => prev.map(item => item._id === id ? { ...item, quantity: newQty } : item));
   }}
   onRemove={(id) => setCart(prev => prev.filter(item => item._id !== id))}
-  total={cart.reduce((acc, i) => acc + (i.price * i.quantity), 0)}
-/>
+  total={cart.reduce((acc, i) => acc + (i.price * i.quantity), 0)}/>
           <WishlistModal isOpen={isWishlistOpen} onClose={() => setIsWishlistOpen(false)} wishlistItems={wishlist} onMoveToBag={(p) => {addToCart(p); setWishlist(prev => prev.filter(i => i._id !== p._id));}} onRemove={(p) => setWishlist(prev => prev.filter(i => i._id !== p._id))} />
           <QuickViewModal product={selectedQuickView} isOpen={!!selectedQuickView} onClose={() => setSelectedQuickView(null)} onAddToCart={addToCart} />
           <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} total={cart.reduce((acc, i) => acc + (i.price * i.quantity), 0)} onConfirm={() => {setOrders(prev => [{orderId: Date.now(), items: [...cart], total: 100}, ...prev]); setCart([]); setIsQRModalOpen(false);}} />
+            </>
+          )}
         </>
       )}
     </div>
   );
 }
+
 
 export default App;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AdminDashboard.css';
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ onClose }) => {
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({ name: '', price: '', category: '', image: '', stock: '' });
   
@@ -69,6 +69,7 @@ const AdminDashboard = () => {
       <main className="admin-main">
         <header className="admin-header">
           <h1>Product Management</h1>
+          {onClose && <button className="admin-back-btn" onClick={onClose}>Back to Store</button>}
           <div className="admin-stats">
             <div className="stat-card">Total Items: <span>{products.length}</span></div>
           </div>
