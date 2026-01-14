@@ -29,13 +29,26 @@ const LoginComponent = ({ onLogin, API_URL }) => {
       const res = await axios.post(`${API_URL}/api/auth/login`, { email: adminCreds.email, password: adminCreds.password });
       onLogin(res.data);
     } catch (err) {
-      // If login fails, try registering then login
+      // If login fails, try registering then login.
+      // If register returns 400 (user exists), retry login once.
       try {
         await axios.post(`${API_URL}/api/auth/register`, adminCreds);
         const res2 = await axios.post(`${API_URL}/api/auth/login`, { email: adminCreds.email, password: adminCreds.password });
         onLogin(res2.data);
       } catch (regErr) {
-        alert('Unable to create or login admin: ' + (regErr.response?.data?.message || regErr.message));
+        console.warn('Admin register error:', regErr.response?.status, regErr.response?.data);
+        if (regErr.response?.status === 400) {
+          // User probably exists — retry login
+          try {
+            const res3 = await axios.post(`${API_URL}/api/auth/login`, { email: adminCreds.email, password: adminCreds.password });
+            onLogin(res3.data);
+          } catch (retryErr) {
+            console.error('Retry login after register failed:', retryErr);
+            alert('Unable to login as admin. Check server logs for details.');
+          }
+        } else {
+          alert('Unable to create or login admin: ' + (regErr.response?.data?.message || regErr.message));
+        }
       }
     } finally {
       setLoading(false);
