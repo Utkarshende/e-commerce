@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import './styles/App.css';
 
-// Components
 import Navbar from './components/layout/Navbar';
 import CategoryBar from './components/layout/CategoryBar';
 import ProductCard from './components/products/ProductCard';
@@ -29,7 +28,6 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // UI States
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
