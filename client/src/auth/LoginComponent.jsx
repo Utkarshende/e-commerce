@@ -12,7 +12,6 @@ const LoginComponent = ({ onLogin, API_URL }) => {
     setLoading(true);
     try {
       const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
-      // Pass data back to App.jsx.
       onLogin(res.data); 
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
@@ -25,12 +24,10 @@ const LoginComponent = ({ onLogin, API_URL }) => {
     setLoading(true);
     const adminCreds = { email: 'admin@luxe.com', password: 'password123', name: 'Admin' };
     try {
-      // Try login first
       const res = await axios.post(`${API_URL}/api/auth/login`, { email: adminCreds.email, password: adminCreds.password });
       onLogin(res.data);
     } catch (err) {
-      // If login fails, try registering then login.
-      // If register returns 400 (user exists), retry login once.
+      
       try {
         await axios.post(`${API_URL}/api/auth/register`, adminCreds);
         const res2 = await axios.post(`${API_URL}/api/auth/login`, { email: adminCreds.email, password: adminCreds.password });
@@ -38,7 +35,6 @@ const LoginComponent = ({ onLogin, API_URL }) => {
       } catch (regErr) {
         console.warn('Admin register error:', regErr.response?.status, regErr.response?.data);
         if (regErr.response?.status === 400) {
-          // User probably exists — retry login
           try {
             const res3 = await axios.post(`${API_URL}/api/auth/login`, { email: adminCreds.email, password: adminCreds.password });
             onLogin(res3.data);
@@ -57,7 +53,6 @@ const LoginComponent = ({ onLogin, API_URL }) => {
 
   return (
     <div className="luxury-auth-wrapper">
-      {/* Left Section: Cinematic Visual */}
       <div className="auth-visual-side">
         <div className="overlay-gradient"></div>
         <img 
@@ -71,7 +66,6 @@ const LoginComponent = ({ onLogin, API_URL }) => {
         </div>
       </div>
 a
-      {/* Right Section: Refined Form */}
       <div className="auth-form-side">
         <div className="form-content-reveal">
           <header className="auth-header">
