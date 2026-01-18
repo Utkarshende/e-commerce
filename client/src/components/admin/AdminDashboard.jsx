@@ -6,7 +6,6 @@ const AdminDashboard = ({ onClose }) => {
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({ name: '', price: '', category: '', image: '', stock: '' });
   
-  // Edit State
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
 
@@ -63,7 +62,6 @@ const AdminDashboard = ({ onClose }) => {
 
   return (
     <div className="admin-container">
-      {/* Sidebar Navigation */}
       <nav className="admin-sidebar">
         <h2 className="admin-logo">LUXE<span>.ADM</span></h2>
         <ul className="admin-nav-links">
@@ -74,7 +72,6 @@ const AdminDashboard = ({ onClose }) => {
         </ul>
       </nav>
 
-      {/* Main Content Area */}
       <main className="admin-main">
         <header className="admin-header">
           <h1>Product Management</h1>
@@ -84,7 +81,6 @@ const AdminDashboard = ({ onClose }) => {
           </div>
         </header>
 
-        {/* Create Form */}
         <section className="admin-section card">
           <h3>Register New Inventory</h3>
           <form onSubmit={handleAddProduct} className="admin-create-form">
@@ -97,7 +93,6 @@ const AdminDashboard = ({ onClose }) => {
           </form>
         </section>
 
-        {/* Inventory Table */}
         <section className="admin-section">
           <table className="admin-table">
             <thead>
